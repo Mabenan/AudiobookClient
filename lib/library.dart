@@ -43,8 +43,8 @@ class _LibraryWidgetState extends State<LibraryWidget> {
           child: Row(children: [
             Image.memory(
               bytes,
-              width: 125,
-              height: 125,
+              width: 64,
+              height: 64,
             ),
             Text(
               snapshot.loadedData.get("Name"),

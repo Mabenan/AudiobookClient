@@ -9,14 +9,15 @@ void main() async {
 }
 
 Future<void> init() async {
-  Parse server = await Parse().initialize("ABCDEFG", "http://localhost:13371/",
+  Parse server = await Parse().initialize(
+      "VZVLcsw29sjuF0QHui7v", "https://audiobook.mabenan.de/",
       appName: "audiobook",
       appVersion: "Version 1",
       appPackageName: "com.mabenan.audiobook",
       coreStore: await CoreStoreSharedPrefsImp.getInstance(),
       debug: true,
       autoSendSessionId: true,
-      liveQueryUrl: "http://localhost:13371/");
+      liveQueryUrl: "https://audiobook.mabenan.de/");
   var resp = await server.healthCheck();
   print(resp.success);
 }
@@ -26,10 +27,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Audiobook',
-  theme: ThemeData(
-    brightness: Brightness.dark,
-    primarySwatch: Colors.orange
-  ),
+      theme:
+          ThemeData(brightness: Brightness.dark, primarySwatch: Colors.orange),
       home: LoginWidget(),
     );
   }
