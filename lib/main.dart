@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:audiobookclient/audioplayer.dart';
+import 'package:audiobookclient/detail.dart';
 import 'package:audiobookclient/library.dart';
 import 'package:audiobookclient/login.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 void main() async {
@@ -43,32 +48,119 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class Visib extends StatefulWidget {
+  Visib({key, this.subRoute}) : super(key: key);
+  final GlobalKey<NavigatorState> subRoute;
+  @override
+  State<StatefulWidget> createState() => _VisibState(subRoute: this.subRoute);
+}
+
+class _VisibState extends State<Visib> {
+  bool visiblity = false;
+
+  _VisibState({this.subRoute});
+  final GlobalKey<NavigatorState> subRoute;
+
+  refresh() {
+    this.setState(() {
+      visiblity = subRoute.currentContext != null &&
+          Navigator.of(subRoute.currentContext).canPop();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: ElevatedButton(
-              onPressed: () => {
-                ParseUser.currentUser().then((user) => {
-                      user.logout(),
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (_) => LoginWidget()))
-                    })
-              },
-              child: Icon(
-                Icons.logout,
-                size: 26.0,
+    visiblity = subRoute.currentContext != null &&
+        Navigator.of(subRoute.currentContext).canPop();
+    return Visibility(
+      visible: this.visiblity,
+      child: ConstrainedBox(
+        constraints: BoxConstraints.tightFor(width: 56.0),
+        child: BackButton(
+          onPressed: () => {Navigator.of(subRoute.currentContext).maybePop()},
+        ),
+      ),
+    );
+  }
+}
+
+class NavObs extends NavigatorObserver {
+  NavObs({this.toObs, this.context});
+  final GlobalKey<_VisibState> toObs;
+  final GlobalKey<NavigatorState> context;
+
+  @override
+  void didPop(Route route, Route previousRoute) {
+    super.didPop(route, previousRoute);
+    if (this.toObs.currentState != null) this.toObs.currentState.refresh();
+  }
+
+  @override
+  void didPush(Route route, Route previousRoute) {
+    super.didPush(route, previousRoute);
+    if (this.toObs.currentState != null) this.toObs.currentState.refresh();
+  }
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  final AudioPlayer player = new AudioPlayer();
+  final GlobalKey<NavigatorState> subRoute = GlobalKey();
+  final GlobalKey<_VisibState> visib = GlobalKey();
+  @override
+  Widget build(BuildContext context) {
+    return new WillPopScope(
+      onWillPop: () => Navigator.of(subRoute.currentContext).maybePop(),
+      child: Scaffold(
+        appBar: AppBar(
+          leading: Visib(key: visib, subRoute: subRoute),
+          title: Text(widget.title),
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: ElevatedButton(
+                onPressed: () => {
+                  ParseUser.currentUser().then((user) => {
+                        user.logout(),
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (_) => LoginWidget()))
+                      })
+                },
+                child: Icon(
+                  Icons.logout,
+                  size: 26.0,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: Navigator(
+                key: subRoute,
+                initialRoute: "main/library",
+                onGenerateRoute: routes,
+                observers: [NavObs(toObs: visib, context: subRoute)],
+              ),
+            ),
+            //Audioplayer(player: player)
+          ],
+        ),
       ),
-      body: Center(child: LibraryWidget()),
     );
+  }
+
+  MaterialPageRoute routes(RouteSettings settings) {
+    WidgetBuilder builder;
+    switch (settings.name) {
+      case "main/library":
+        builder = (BuildContext _) => LibraryWidget(player: this.player);
+        break;
+      case "main/detail":
+        builder = (BuildContext _) => DetailWidget(
+            album: (settings.arguments as DetailRouteArguments).album);
+        break;
+    }
+    return MaterialPageRoute(builder: builder, settings: settings);
   }
 }
