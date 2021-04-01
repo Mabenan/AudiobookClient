@@ -9,7 +9,10 @@
             "type": "dart",
             "request": "launch",
             "program": "lib/main.dart",
-            "deviceId": ""
+            "deviceId": "emulator-5554",
+            "preLaunchTask": "AVD",
+            // "deviceId": "chrome",
+            "args": ["--dart-define=DEBUG_SERVER=true"]
         },
     ]
 }

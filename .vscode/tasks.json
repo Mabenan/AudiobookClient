@@ -1,0 +1,31 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "type": "shell",
+        "label": "startAVD",
+        "command": "start",
+        "options": {
+          "shell": {
+            "executable": "C:\\WINDOWS\\System32\\cmd.exe",
+            "args": [
+              "/d", "/c"
+            ]
+          }
+        },
+        "args": [
+          "cmd.exe",
+          "/c",
+          "\"emulator -avd DebugClient -skin 1080x1920\""
+        ]
+      },
+      {
+          "type": "shell",
+          "label": "AVD",
+          "dependsOn": "startAVD",
+          "command": "adb wait-for-device"
+      }
+    ]
+  }

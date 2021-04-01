@@ -4,6 +4,7 @@ import 'package:audiobookclient/audioplayer.dart';
 import 'package:audiobookclient/detail.dart';
 import 'package:audiobookclient/library.dart';
 import 'package:audiobookclient/login.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -15,17 +16,44 @@ void main() async {
 }
 
 Future<void> init() async {
-  Parse server = await Parse().initialize(
-      "VZVLcsw29sjuF0QHui7v", "https://audiobook.mabenan.de/",
-      appName: "audiobook",
-      appVersion: "Version 1",
-      appPackageName: "com.mabenan.audiobook",
-      coreStore: await CoreStoreSharedPrefsImp.getInstance(),
-      debug: true,
-      autoSendSessionId: true,
-      liveQueryUrl: "https://audiobook.mabenan.de/");
-  var resp = await server.healthCheck();
-  print(resp.success);
+  if (const bool.fromEnvironment("DEBUG_SERVER")) {
+    Parse server = await Parse().initialize("ABCDEFG",
+        kIsWeb ? "http://localhost:13371/" : "http://10.0.2.2:13371/",
+        appName: "audiobook",
+        appVersion: "Version 1",
+        appPackageName: "com.mabenan.audiobook",
+        coreStore: await CoreStoreSharedPrefsImp.getInstance(),
+        debug: true,
+        autoSendSessionId: true,
+        liveQueryUrl:
+            kIsWeb ? "http://localhost:13371/" : "http://10.0.2.2:13371/");
+    var resp = await server.healthCheck();
+    print(resp.success);
+  } else {
+    Parse server = await Parse().initialize(
+        "VZVLcsw29sjuF0QHui7v", "http://node:13391/",
+        appName: "audiobook",
+        appVersion: "Version 1",
+        appPackageName: "com.mabenan.audiobook",
+        coreStore: await CoreStoreSharedPrefsImp.getInstance(),
+        debug: true,
+        autoSendSessionId: true,
+        liveQueryUrl: "http://node:13391/");
+    var resp = await server.healthCheck();
+    if (!resp.success) {
+      server = await Parse().initialize(
+          "VZVLcsw29sjuF0QHui7v", "https://audiobook.mabenan.de/",
+          appName: "audiobook",
+          appVersion: "Version 1",
+          appPackageName: "com.mabenan.audiobook",
+          coreStore: await CoreStoreSharedPrefsImp.getInstance(),
+          debug: true,
+          autoSendSessionId: true,
+          liveQueryUrl: "https://audiobook.mabenan.de/");
+      resp = await server.healthCheck();
+    }
+    print(resp.success);
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -143,9 +171,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 observers: [NavObs(toObs: visib, context: subRoute)],
               ),
             ),
-            //Audioplayer(player: player)
           ],
         ),
+        bottomNavigationBar: AudioplayerWidget(),
       ),
     );
   }

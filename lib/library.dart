@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:audiobookclient/bookdownloader.dart';
 import 'package:http/http.dart' as http;
 import 'dart:typed_data';
-
+import 'package:path/path.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:audiobookclient/detail.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,10 +26,7 @@ class _LibraryWidgetState extends State<LibraryWidget> {
   Widget build(BuildContext context) {
     QueryBuilder query = QueryBuilder<ParseObject>(ParseObject("Album"))
       ..orderByAscending('Name');
-    return Column(
-      children: [
-        Expanded(
-          child: ParseLiveListWidget(
+    return  ParseLiveListWidget(
             query: query,
             lazyLoading: false,
             childBuilder: (BuildContext context,
@@ -39,9 +37,6 @@ class _LibraryWidgetState extends State<LibraryWidget> {
                 ParseLiveListElementSnapshot<ParseObject> snapshot) {
               return buildChilds(context, snapshot);
             },
-          ),
-        ),
-      ],
     );
   }
 
@@ -50,6 +45,7 @@ class _LibraryWidgetState extends State<LibraryWidget> {
     if (snapshot.failed) {
       return const Text('something went wrong!');
     } else if (snapshot.hasData) {
+      BookMaster().getBook(snapshot.loadedData); //To Preload Book Data
       Widget image = Icon(
         Icons.image,
         size: 64,
@@ -64,63 +60,27 @@ class _LibraryWidgetState extends State<LibraryWidget> {
       }
       return GestureDetector(
         onTap: () => {
-          // Navigator.of(context).pushNamed("main/detail", arguments: DetailRouteArguments(album : snapshot.loadedData))
-          openAlbum(snapshot.loadedData)
+          Navigator.of(context).pushNamed("main/detail",
+              arguments: DetailRouteArguments(album: snapshot.loadedData))
+          // openAlbum(context, snapshot.loadedData)
         },
         child: Card(
-          child: Row(children: [
-            image,
-            Text(
-              snapshot.loadedData.get("Name"),
-            )
-          ]),
+          child: Row(
+            children: [
+              image,
+              Expanded(
+                child: Text(
+                  snapshot.loadedData.get("Name"),
+                ),
+              ),
+            ],
+          ),
         ),
       );
     } else {
       return const ListTile(
         leading: CircularProgressIndicator(),
       );
-    }
-  }
-
-  openAlbum(ParseObject album) async {
-    QueryBuilder query = QueryBuilder<ParseObject>(ParseObject("Listening"));
-    query.whereEqualTo("Album", album);
-    var resp = await query.query();
-    if (resp.success) {
-      if (resp.results != null) {
-      } else {
-        var tracks = await (QueryBuilder(ParseObject("Track"))
-              ..whereRelatedTo("Tracks", "Album", album.objectId)
-              ..orderByAscending("Order"))
-            .query();
-        if (tracks.success) {
-          if (tracks.results != null) {
-            final directory = await getApplicationDocumentsDirectory();
-            for (var track in tracks.results) {
-              var file =
-                  File(directory.path + "/audioBooks/" + track.get("File"));
-              if (! await file.exists()) {
-                var client = ParseCoreData().clientCreator(
-                    sendSessionId: true,
-                    securityContext: ParseCoreData().securityContext);
-                var response = await client.getBytes(
-                    getSanitisedUri(client, '/stream/' + track.get("File"))
-                        .toString());
-                file.writeAsBytes(response.bytes);
-              }
-            }
-            var track = tracks.results.first as ParseObject;
-            player.setFilePath(
-                directory.path + "/audioBooks/" + track.get("File"));
-            //player.setUrl('https://audiobook.mabenan.de/stream/' + track.get("File"), headers:  {"x-parse-session-token": user.sessionToken});
-            player.play();
-          }
-        }
-      }
-    } else {
-      Navigator.of(context).pushNamed("main/detail",
-          arguments: DetailRouteArguments(album: album));
     }
   }
 }
