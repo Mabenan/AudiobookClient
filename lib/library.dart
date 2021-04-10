@@ -1,86 +1,127 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 import 'package:audiobookclient/bookdownloader.dart';
-import 'package:http/http.dart' as http;
-import 'dart:typed_data';
-import 'package:path/path.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:audiobookclient/detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:path_provider/path_provider.dart';
+
+import 'data/album.dart';
 
 class LibraryWidget extends StatefulWidget {
-  LibraryWidget({key, this.player}) : super(key: key);
-  final AudioPlayer player;
+  LibraryWidget({key}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => _LibraryWidgetState(player: player);
+  State<StatefulWidget> createState() => _LibraryWidgetState();
 }
 
 class _LibraryWidgetState extends State<LibraryWidget> {
-  _LibraryWidgetState({this.player});
-  final AudioPlayer player;
+  _LibraryWidgetState();
+  List<Album> _albums = [];
   @override
   Widget build(BuildContext context) {
-    QueryBuilder query = QueryBuilder<ParseObject>(ParseObject("Album"))
-      ..orderByAscending('Name');
-    return  ParseLiveListWidget(
-            query: query,
-            lazyLoading: false,
-            childBuilder: (BuildContext context,
-                ParseLiveListElementSnapshot<ParseObject> snapshot) {
-              return buildChilds(context, snapshot);
-            },
-            removedItemBuilder: (BuildContext context,
-                ParseLiveListElementSnapshot<ParseObject> snapshot) {
-              return buildChilds(context, snapshot);
-            },
+    Albums().getAll().then((value) => {
+          setState(() {
+            _albums = value;
+          })
+        });
+    return Container(
+      child: _albums.length != 0
+          ? getList(context)
+          : Center(
+              child: CircularProgressIndicator(),
+            ),
     );
   }
 
-  Widget buildChilds(BuildContext context,
-      ParseLiveListElementSnapshot<ParseObject> snapshot) {
-    if (snapshot.failed) {
-      return const Text('something went wrong!');
-    } else if (snapshot.hasData) {
-      BookMaster().getBook(snapshot.loadedData); //To Preload Book Data
-      Widget image = Icon(
-        Icons.image,
-        size: 64,
-      );
-      if (snapshot.loadedData.get("Cover") != null) {
-        Uint8List bytes = base64.decode(snapshot.loadedData.get("Cover"));
-        image = Image.memory(
-          bytes,
-          width: 64,
-          height: 64,
-        );
-      }
-      return GestureDetector(
-        onTap: () => {
-          Navigator.of(context).pushNamed("main/detail",
-              arguments: DetailRouteArguments(album: snapshot.loadedData))
-          // openAlbum(context, snapshot.loadedData)
-        },
-        child: Card(
-          child: Row(
-            children: [
-              image,
-              Expanded(
-                child: Text(
-                  snapshot.loadedData.get("Name"),
+  Widget buildChilds(BuildContext context, Album album) {
+    try {
+      assert(album != null);
+      BookMaster().getBook(album); //To Preload Book Data
+      return Card(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 60,
+              child: album.image64x64,
+            ),
+            Expanded(
+              child: GestureDetector(
+                child: Column(
+                  children: [
+                    Text(
+                      album.name,
+                    ),
+                    BookMaster.buildDownloadProgress(album),
+                  ],
                 ),
+                onTap: () => Navigator.of(context).pushNamed("main/detail", arguments: DetailRouteArguments(album: album)),
               ),
-            ],
-          ),
+            ),
+            StreamBuilder<bool>(
+              stream: BookMaster().getBook(album).canDownload,
+              initialData: false,
+              builder: (context, snapshot) {
+                return snapshot.data
+                    ? GestureDetector(
+                        child: Container(
+                          width: 40,
+                          padding: EdgeInsets.only(right: 10),
+                          child: Icon(Icons.file_download, size: 30),
+                        ),
+                        onTap: () =>
+                            {BookMaster().getBook(album).startDownload()},
+                      )
+                    : Container();
+              },
+            ),
+            StreamBuilder<bool>(
+              stream: BookMaster().getBook(album).canPlay,
+              initialData: false,
+              builder: (context, snapshot) {
+                return snapshot.data
+                    ? GestureDetector(
+                        child: Container(
+                          width: 40,
+                          padding: EdgeInsets.only(right: 10),
+                          child: Icon(Icons.play_circle_fill, size: 30),
+                        ),
+                        onTap: () =>
+                            {BookMaster().getBook(album).play()},
+                      )
+                    : Container();
+              },
+            ),
+          ],
         ),
       );
-    } else {
-      return const ListTile(
-        leading: CircularProgressIndicator(),
-      );
+    } catch (ex) {
+      return Card(
+          child: Row(
+        children: [
+          Text(album != null ? album.name : "Album is null"),
+          Spacer(),
+          Text(ex.toString())
+        ],
+      ));
     }
+  }
+
+  getList(BuildContext context) {
+    return RefreshIndicator(
+        child: ListView.builder(
+          itemCount: _albums.length,
+          itemBuilder: (BuildContext context, int index) {
+            return buildChilds(context, _albums.elementAt(index));
+          },
+        ),
+        onRefresh: getData);
+  }
+
+  Future<void> getData() async {
+    print("refresh");
+    var alb = await Albums().getAll();
+    setState(() {
+      _albums = alb;
+    });
   }
 }

@@ -1,13 +1,13 @@
-import 'dart:io';
-
-import 'package:audiobookclient/audioplayer.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:audiobookclient/detail.dart';
 import 'package:audiobookclient/library.dart';
 import 'package:audiobookclient/login.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'audioplayer.dart';
+import 'background.dart';
+import 'globals.dart' as globals;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,44 +16,7 @@ void main() async {
 }
 
 Future<void> init() async {
-  if (const bool.fromEnvironment("DEBUG_SERVER")) {
-    Parse server = await Parse().initialize("ABCDEFG",
-        kIsWeb ? "http://localhost:13371/" : "http://10.0.2.2:13371/",
-        appName: "audiobook",
-        appVersion: "Version 1",
-        appPackageName: "com.mabenan.audiobook",
-        coreStore: await CoreStoreSharedPrefsImp.getInstance(),
-        debug: true,
-        autoSendSessionId: true,
-        liveQueryUrl:
-            kIsWeb ? "http://localhost:13371/" : "http://10.0.2.2:13371/");
-    var resp = await server.healthCheck();
-    print(resp.success);
-  } else {
-    Parse server = await Parse().initialize(
-        "VZVLcsw29sjuF0QHui7v", "http://node:13391/",
-        appName: "audiobook",
-        appVersion: "Version 1",
-        appPackageName: "com.mabenan.audiobook",
-        coreStore: await CoreStoreSharedPrefsImp.getInstance(),
-        debug: true,
-        autoSendSessionId: true,
-        liveQueryUrl: "http://node:13391/");
-    var resp = await server.healthCheck();
-    if (!resp.success) {
-      server = await Parse().initialize(
-          "VZVLcsw29sjuF0QHui7v", "https://audiobook.mabenan.de/",
-          appName: "audiobook",
-          appVersion: "Version 1",
-          appPackageName: "com.mabenan.audiobook",
-          coreStore: await CoreStoreSharedPrefsImp.getInstance(),
-          debug: true,
-          autoSendSessionId: true,
-          liveQueryUrl: "https://audiobook.mabenan.de/");
-      resp = await server.healthCheck();
-    }
-    print(resp.success);
-  }
+  await globals.initParse();
 }
 
 class MyApp extends StatelessWidget {
@@ -63,8 +26,38 @@ class MyApp extends StatelessWidget {
       title: 'Audiobook',
       theme:
           ThemeData(brightness: Brightness.dark, primarySwatch: Colors.orange),
-      home: LoginWidget(),
+      home: AudioServiceWidget(child: PageWrapper()),
+      navigatorKey: globals.navigatorKey,
     );
+  }
+}
+
+class PageWrapper extends StatefulWidget {
+  PageWrapper({Key key}) : super(key: key);
+  @override
+  _PageWrapperState createState() => _PageWrapperState();
+}
+
+class _PageWrapperState extends State<PageWrapper> {
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      initialRoute: "login",
+      onGenerateRoute: routes,
+    );
+  }
+
+  MaterialPageRoute routes(RouteSettings settings) {
+    WidgetBuilder builder;
+    switch (settings.name) {
+      case "main":
+        builder = (BuildContext _) => MyHomePage();
+        break;
+      case "login":
+        builder = (BuildContext _) => LoginWidget();
+        break;
+    }
+    return MaterialPageRoute(builder: builder, settings: settings);
   }
 }
 
@@ -130,12 +123,18 @@ class NavObs extends NavigatorObserver {
   }
 }
 
+
 class _MyHomePageState extends State<MyHomePage> {
-  final AudioPlayer player = new AudioPlayer();
   final GlobalKey<NavigatorState> subRoute = GlobalKey();
   final GlobalKey<_VisibState> visib = GlobalKey();
+  bool offline = false;
   @override
   Widget build(BuildContext context) {
+    globals.isOffline().then((value) => {
+          setState(() {
+            offline = value;
+          })
+        });
     return new WillPopScope(
       onWillPop: () => Navigator.of(subRoute.currentContext).maybePop(),
       child: Scaffold(
@@ -143,20 +142,39 @@ class _MyHomePageState extends State<MyHomePage> {
           leading: Visib(key: visib, subRoute: subRoute),
           title: Text(widget.title),
           actions: [
-            Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: ElevatedButton(
-                onPressed: () => {
-                  ParseUser.currentUser().then((user) => {
-                        user.logout(),
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (_) => LoginWidget()))
-                      })
+            Row(children: [
+              Text(offline ? "Offline" : "Online"),
+              Switch(
+                value: offline,
+                onChanged: (value) {
+                  setState(() {
+                    globals.offline = value;
+                    globals.isOffline().then((value) {
+                      setState(() {
+                        offline = value;
+                      });
+                      if (value) {
+                        showDialog(
+                            context: context,
+                            builder: (cntx) =>
+                                AlertDialog(title: Text("is Offline: " + globals.forcedOffline.toString())));
+                      }
+                    });
+                  });
                 },
-                child: Icon(
-                  Icons.logout,
-                  size: 26.0,
-                ),
+              ),
+            ]),
+            IconButton(
+              onPressed: () => {
+                ParseUser.currentUser().then((user) => {
+                      user.logout(),
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (_) => LoginWidget()))
+                    })
+              },
+              icon: Icon(
+                Icons.logout,
+                size: 26.0,
               ),
             ),
           ],
@@ -182,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
     WidgetBuilder builder;
     switch (settings.name) {
       case "main/library":
-        builder = (BuildContext _) => LibraryWidget(player: this.player);
+        builder = (BuildContext _) => LibraryWidget();
         break;
       case "main/detail":
         builder = (BuildContext _) => DetailWidget(

@@ -1,9 +1,8 @@
-import 'package:audiobookclient/library.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
-import 'main.dart';
+import 'globals.dart' as globals;
 
 class LoginWidget extends StatefulWidget {
   @override
@@ -19,17 +18,20 @@ class _LoginWidgetState extends State<LoginWidget> {
 
     ParseResponse resp = await user.login();
     if (resp.success) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => MyHomePage()));
+      Navigator.pushReplacementNamed(context, "main");
     }
   }
 
   void checkLogin() async {
     ParseUser user = await ParseUser.currentUser();
     if (user != null) {
-      ParseResponse resp = await user.getUpdatedUser();
-      if (resp.success) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => MyHomePage()));
+      if (!await globals.isOffline()) {
+        ParseResponse resp = await user.getUpdatedUser();
+        if (resp.success) {
+          Navigator.pushReplacementNamed(context, "main");
+        }
+      }else{
+        Navigator.pushReplacementNamed(context, "main");
       }
     }
   }
