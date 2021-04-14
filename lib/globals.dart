@@ -1,3 +1,5 @@
+import 'package:audio_service/audio_service.dart';
+import 'package:audiobookclient/background.dart';
 import 'package:audiobookclient/data/listening.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +31,9 @@ set offline(value) {
   if (value != null) {
     ParseCoreData().getStore().setBool("offline", value);
     _offline = value;
+    if(AudioService.running) {
+      AudioPlayerFrontendService().offline(value);
+    }
   } else {
     ParseCoreData().getStore().setBool("offline", false);
     _offline = false;

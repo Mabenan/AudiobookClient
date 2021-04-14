@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
@@ -32,6 +33,11 @@ class AudioPlayerFrontendService {
       Listenings().getLast().then((value) async {
         await AudioService.customAction("playAlbum", value.album);
       });
+      AudioService.runningStream.listen((event) {
+        if(!event){
+          exit(0);
+        }
+      });
     });
     AudioService.customEventStream.listen((event) {
       _handleCustomEvent(event);
@@ -40,6 +46,8 @@ class AudioPlayerFrontendService {
 
   final _progressStream = BehaviorSubject<ProgressStream>();
   Stream<ProgressStream> get progressStream => _progressStream.stream;
+  final _sleepTimerStream = BehaviorSubject<Duration>();
+  Stream<Duration> get sleepTimerStream => _sleepTimerStream.stream;
 
   void _handleCustomEvent(event) {
     Map<String, dynamic> eventData = event;
@@ -47,7 +55,17 @@ class AudioPlayerFrontendService {
       case "progress":
         _progress(eventData["data"] as Map<String, dynamic>);
         break;
+      case "sleepTimer":
+        _sleepTimer(eventData["data"] as  Map<String,dynamic>);
     }
+  }
+
+  offline(bool value) async{
+    await AudioService.customAction("offline", value);
+  }
+
+  sleepTimer(int i) async{
+    await AudioService.customAction("sleepTimer", i);
   }
 
   play() async {
@@ -73,6 +91,10 @@ class AudioPlayerFrontendService {
   void dispose() {
     _progressStream.close();
   }
+
+  void _sleepTimer(Map<String, dynamic> eventData) {
+    _sleepTimerStream.add(new Duration(seconds:eventData["sleepCountdown"]));
+  }
 }
 
 class AudioPlayerTask extends BackgroundAudioTask {
@@ -80,16 +102,19 @@ class AudioPlayerTask extends BackgroundAudioTask {
   LocalListening _listening;
   List<Track> tracks;
   final AudioPlayer player = new AudioPlayer();
-  final ConcatenatingAudioSource source =
-  new ConcatenatingAudioSource(
-    // Start loading next item just before reaching it.
-    useLazyPreparation: false, // default
-    // Customise the shuffle algorithm.
-    shuffleOrder: DefaultShuffleOrder(),
-    children: []// default
-  );
+  final ConcatenatingAudioSource source = new ConcatenatingAudioSource(
+      // Start loading next item just before reaching it.
+      useLazyPreparation: false, // default
+      // Customise the shuffle algorithm.
+      shuffleOrder: DefaultShuffleOrder(),
+      children: [] // default
+      );
 
   bool _playAfterClear;
+
+  int sleepCountdown;
+
+  StreamSubscription<Null> sub;
 
   onStop() async {
     await player.pause();
@@ -100,13 +125,20 @@ class AudioPlayerTask extends BackgroundAudioTask {
   }
 
   onCustomAction(name, arguments) async {
-    if (name == "playAlbum") {
-      await playAlbum(arguments);
+    switch (name) {
+      case "playAlbum":
+        await playAlbum(arguments);
+        break;
+      case "sleepTimer":
+        await sleepTimer(arguments);
+        break;
+      case "offline":
+        await offline(arguments);
     }
   }
 
   playAlbum(String objectId) async {
-      await player.pause();
+    await player.pause();
     _currentAlbum = await Albums().get(objectId);
     tracks = await Tracks().getAlbum(_currentAlbum);
     tracks.sort((a, b) => a.order.compareTo(b.order));
@@ -147,10 +179,14 @@ class AudioPlayerTask extends BackgroundAudioTask {
               "progress": _listening.progress,
             },
           });
+          AudioServiceBackground.sendCustomEvent({
+            "event": "sleepTimer",
+            "data": {
+              "sleepCountdown": sleepCountdown
+            },
+          });
         }
-      }catch(ex){
-
-      }
+      } catch (ex) {}
     });
     player.playerStateStream.listen((playerState) {
       // ... and forward them to all audio_service clients.
@@ -189,7 +225,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
     }
     var firstTrack = this._listening.track;
     var start = tracks.indexWhere((element) => element.objectId == firstTrack);
-    if(start < 0){
+    if (start < 0) {
       start = 0;
     }
     var startDuration = new Duration(seconds: this._listening.progress);
@@ -202,8 +238,9 @@ class AudioPlayerTask extends BackgroundAudioTask {
     }
     try {
       await source.clear();
-      List<AudioSource> trackSources = List<AudioSource>.from(tracks.map((e) => AudioSource.uri(
-          Uri.file(directory.path + "/audioBooks/" + e.get("File")))));
+      List<AudioSource> trackSources = List<AudioSource>.from(tracks.map((e) =>
+          AudioSource.uri(
+              Uri.file(directory.path + "/audioBooks/" + e.get("File")))));
       await source.addAll(trackSources);
       await player.seek(startDuration, index: start);
     } catch (ex) {
@@ -238,7 +275,6 @@ class AudioPlayerTask extends BackgroundAudioTask {
       ],
     );
     // Listen to state changes on the player...
-
   }
 
   onPlay() => player.play();
@@ -255,5 +291,32 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
   onSeekForward(bool begin) async {
     return player.seekToNext();
+  }
+
+  sleepTimer(int i) async{
+
+    sleepCountdown = i * 60;
+    if (sub != null){
+     await sub.cancel();
+    }
+    if (i != 0) {
+      if (!AudioServiceBackground.state.playing) {
+        onPlay();
+      }
+      sub = new Stream.periodic(const Duration(seconds: 1), (_) {
+        if (AudioServiceBackground.state.playing) {
+          sleepCountdown--;
+        }
+      }).listen((event) {
+        if (sleepCountdown <= 0) {
+          sub.cancel();
+          onPause();
+        }
+      });
+    }
+  }
+
+  offline(bool value) {
+    globals.offline = value;
   }
 }

@@ -16,11 +16,6 @@ class AudioplayerWidget extends StatefulWidget {
 }
 
 class _AudioPlayerState extends State<AudioplayerWidget> {
-  int sleepCountdown;
-
-  StreamSubscription sub;
-
-  Duration sleepTimer;
 
   _AudioPlayerState();
   bool big = false;
@@ -65,17 +60,17 @@ class _AudioPlayerState extends State<AudioplayerWidget> {
           ),
           Expanded(
             child: GestureDetector(
-                child: Container(
-                  padding: EdgeInsets.only(left: 5, right: 5),
-                  child: Marquee(
-                    text: currentPlayerStream.album.name +
-                        "|" +
-                        currentPlayerStream.track.name,
-                    blankSpace: 20.0,
-                    velocity: 30.0,
-                    pauseAfterRound: Duration(seconds: 1),
-                  ),
+              child: Container(
+                padding: EdgeInsets.only(left: 5, right: 5),
+                child: Marquee(
+                  text: currentPlayerStream.album.name +
+                      "|" +
+                      currentPlayerStream.track.name,
+                  blankSpace: 20.0,
+                  velocity: 30.0,
+                  pauseAfterRound: Duration(seconds: 1),
                 ),
+              ),
               onTap: () {
                 setState(() {
                   big = true;
@@ -154,8 +149,11 @@ class _AudioPlayerState extends State<AudioplayerWidget> {
                         ? Icons.pause_circle_filled
                         : Icons.play_circle_fill,
                     size: 50),
-                onTap: () =>
-                    {isPlaying ? AudioService.pause() : AudioPlayerFrontendService().play()},
+                onTap: () => {
+                  isPlaying
+                      ? AudioService.pause()
+                      : AudioPlayerFrontendService().play()
+                },
               ));
         } else {
           return Container();
@@ -192,10 +190,15 @@ class _AudioPlayerState extends State<AudioplayerWidget> {
                 ),
                 Container(
                   alignment: Alignment.center,
-                  child: sleepTimer != null && sleepTimer.inSeconds > 0
-                      ? Text(sleepTimer.toString())
-                      : Container(),
-                )
+                  child: StreamBuilder<Duration>(
+                    stream: AudioPlayerFrontendService().sleepTimerStream,
+                    initialData: Duration(),
+                    builder: (context, data) =>
+                        data.data != null && data.data.inSeconds > 0
+                            ? Text(data.data.toString())
+                            : Container(),
+                  ),
+                ),
               ],
             ),
           ),
@@ -310,28 +313,6 @@ class _AudioPlayerState extends State<AudioplayerWidget> {
 
   void setSleepTimer(int i) {
     selectedTimer = i;
-    sleepCountdown = i * 60;
-    if (sub != null) {
-      sub.cancel();
-    }
-    if (i != 0) {
-      if (!AudioService.playbackState.playing) {
-        AudioPlayerFrontendService().play();
-      }
-      sub = new Stream.periodic(const Duration(seconds: 1), (_) {
-        if (AudioService.playbackState.playing) {
-          sleepCountdown--;
-        }
-      }).listen((event) {
-        if (sleepCountdown <= 0) {
-          selectedTimer = 0;
-          sub.cancel();
-          AudioService.pause();
-        }
-        setState(() {
-          sleepTimer = Duration(seconds: sleepCountdown);
-        });
-      });
-    }
+    AudioPlayerFrontendService().sleepTimer(i);
   }
 }

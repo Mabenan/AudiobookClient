@@ -18,7 +18,7 @@ class _LoginWidgetState extends State<LoginWidget> {
 
     ParseResponse resp = await user.login();
     if (resp.success) {
-      Navigator.pushReplacementNamed(context, "main");
+      Navigator.pushReplacementNamed(context, "init");
     }
   }
 
@@ -26,12 +26,16 @@ class _LoginWidgetState extends State<LoginWidget> {
     ParseUser user = await ParseUser.currentUser();
     if (user != null) {
       if (!await globals.isOffline()) {
+        globals.forcedOffline = true;
+        Navigator.pushReplacementNamed(context, "init");
         ParseResponse resp = await user.getUpdatedUser();
         if (resp.success) {
-          Navigator.pushReplacementNamed(context, "main");
+          globals.forcedOffline = false;
+        }else{
+          globals.forcedOffline = true;
         }
       }else{
-        Navigator.pushReplacementNamed(context, "main");
+        Navigator.pushReplacementNamed(context, "init");
       }
     }
   }

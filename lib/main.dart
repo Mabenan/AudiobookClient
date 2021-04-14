@@ -8,6 +8,7 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'audioplayer.dart';
 import 'background.dart';
 import 'globals.dart' as globals;
+import 'init.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,6 +53,9 @@ class _PageWrapperState extends State<PageWrapper> {
     switch (settings.name) {
       case "main":
         builder = (BuildContext _) => MyHomePage();
+        break;
+      case "init":
+        builder = (BuildContext _) => InitWidget();
         break;
       case "login":
         builder = (BuildContext _) => LoginWidget();

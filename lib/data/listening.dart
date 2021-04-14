@@ -196,55 +196,59 @@ class Listenings {
 
     if (this.syncProc == null) {
       this.syncProc = Stream.periodic(Duration(seconds: 10), (comp) async {
-        if (!await globals.isOffline()) {
-          List<LocalListening> listings =
-              List<LocalListening>.from(_listenings.values);
-          List<String> removeFromLocal = [];
-          for (var listing in listings) {
-            if (!listing.objectId.startsWith("local")) {
-              //was already Synced at some point
-              ParseResponse resp =
-                  await Listening().getObject(listing.objectId);
-              if (resp.success) {
-                Listening serverVersion = resp.result as Listening;
-                if (listing.serverSynced.isBefore(serverVersion.serverSynced)) {
-                  // someone else sended progress information
-                  listing.track = serverVersion.track;
-                  listing.progress = serverVersion.progress;
-                  listing.updated = DateTime.now();
-                  listing.serverSynced = serverVersion.serverSynced;
-                } else if (listing.serverSynced.isBefore(listing.updated)) {
-                  serverVersion.track = listing.track;
-                  serverVersion.progress = listing.progress;
-                  serverVersion.serverSynced =
-                      listing.serverSynced = DateTime.now();
-                  await serverVersion.save();
-                }
-              } else {
-                removeFromLocal.add(listing.objectId);
-              }
-            } else {
-              Listening serverVersion = Listening();
-              serverVersion.album = listing.album;
-              serverVersion.user = listing.user;
-              serverVersion.track = listing.track;
-              serverVersion.progress = listing.progress;
-              var serverSynced = serverVersion.serverSynced = DateTime.now();
-              ParseResponse resp = await serverVersion.save();
-              if (resp.success) {
-                listing.objectId = resp.result.objectId;
-                listing.serverSynced = serverSynced;
-              }
-            }
-          }
-          for (var idToRemove in removeFromLocal) {
-            _listenings.remove(idToRemove);
-          }
-          await _cache();
-        }
+        await _sync();
       }).listen((comp) {
         return;
       });
+    }
+  }
+
+  Future _sync() async {
+    if (!await globals.isOffline()) {
+      List<LocalListening> listings =
+          List<LocalListening>.from(_listenings.values);
+      List<String> removeFromLocal = [];
+      for (var listing in listings) {
+        if (!listing.objectId.startsWith("local")) {
+          //was already Synced at some point
+          ParseResponse resp =
+              await Listening().getObject(listing.objectId);
+          if (resp.success) {
+            Listening serverVersion = resp.result as Listening;
+            if (listing.serverSynced.isBefore(serverVersion.serverSynced)) {
+              // someone else sended progress information
+              listing.track = serverVersion.track;
+              listing.progress = serverVersion.progress;
+              listing.updated = DateTime.now();
+              listing.serverSynced = serverVersion.serverSynced;
+            } else if (listing.serverSynced.isBefore(listing.updated)) {
+              serverVersion.track = listing.track;
+              serverVersion.progress = listing.progress;
+              serverVersion.serverSynced =
+                  listing.serverSynced = DateTime.now();
+              await serverVersion.save();
+            }
+          } else {
+            removeFromLocal.add(listing.objectId);
+          }
+        } else {
+          Listening serverVersion = Listening();
+          serverVersion.album = listing.album;
+          serverVersion.user = listing.user;
+          serverVersion.track = listing.track;
+          serverVersion.progress = listing.progress;
+          var serverSynced = serverVersion.serverSynced = DateTime.now();
+          ParseResponse resp = await serverVersion.save();
+          if (resp.success) {
+            listing.objectId = resp.result.objectId;
+            listing.serverSynced = serverSynced;
+          }
+        }
+      }
+      for (var idToRemove in removeFromLocal) {
+        _listenings.remove(idToRemove);
+      }
+      await _cache();
     }
   }
 
