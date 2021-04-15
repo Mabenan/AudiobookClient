@@ -15,7 +15,7 @@ class _InitWidgetState extends State<InitWidget> {
 
   _InitWidgetState() : super(){
     Future.microtask(() async {
-      List<Album> albums = await Albums().getAll();
+      List<Album> albums = await Albums().getAll(fromServer: true);
       setState(() {
         albumSum = albums.length;
       });

@@ -119,6 +119,7 @@ class _LibraryWidgetState extends State<LibraryWidget> {
 
   Future<void> getData() async {
     print("refresh");
+    await Albums().refresh(fromServer: true);
     var alb = await Albums().getAll();
     setState(() {
       _albums = alb;

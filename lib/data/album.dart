@@ -97,14 +97,17 @@ class Albums {
 
   }
 
-  refresh() async{
+  refresh({bool fromServer = false}) async{
     _albums.clear();
     _loaded = false;
-    await getAll();
+    await getAll(fromServer: fromServer);
   }
 
-  Future<List<Album>> getAll() async {
+  Future<List<Album>> getAll({bool fromServer = false}) async {
     if (!_loaded) {
+      if(fromServer && ! await globals.isOffline()){
+        await ParseCoreData().getStore().remove("albums");
+      }
       if(await ParseCoreData().getStore().containsKey("albums")) {
         List<String> albumKeys =
         await ParseCoreData().getStore().getStringList("albums");
