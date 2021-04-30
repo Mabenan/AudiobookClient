@@ -35,6 +35,11 @@ jobs:
     - run: flutter pub get
     - run: flutter doctor -v
     - run: flutter build apk
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: deploy
+    steps:
     - uses: easingthemes/ssh-deploy@v2.1.5
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
