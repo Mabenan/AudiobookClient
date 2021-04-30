@@ -30,8 +30,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   parse_server_sdk_flutter: 
     git:
-      url: https://github.com/parse-community/Parse-SDK-Flutter.git
-      ref: nullsafety
+      url: https://github.com/RodrigoSMarques/Parse-SDK-Flutter.git
+      ref: nullsafety-marques
       path: packages/flutter
   just_audio: ^0.7.2
   just_audio_web: ^0.3.1

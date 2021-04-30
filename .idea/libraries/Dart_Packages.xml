@@ -306,14 +306,14 @@
         <entry key="parse_server_sdk">
           <value>
             <list>
-              <option value="$USER_HOME$/AppData/Local/Pub/Cache/git/Parse-SDK-Flutter-b09fb71e34ac5096973f5f80462540d933f1baeb/packages/dart/lib" />
+              <option value="$USER_HOME$/AppData/Local/Pub/Cache/git/Parse-SDK-Flutter-e0253b4a050882156e3c65c142f7ada809e79312/packages/dart/lib" />
             </list>
           </value>
         </entry>
         <entry key="parse_server_sdk_flutter">
           <value>
             <list>
-              <option value="$USER_HOME$/AppData/Local/Pub/Cache/git/Parse-SDK-Flutter-b09fb71e34ac5096973f5f80462540d933f1baeb/packages/flutter/lib" />
+              <option value="$USER_HOME$/AppData/Local/Pub/Cache/git/Parse-SDK-Flutter-49b505500da75f6e1b88af0940ec7d324037faca/packages/flutter/lib" />
             </list>
           </value>
         </entry>
@@ -590,8 +590,8 @@
       <root url="file://C:/Flutter/flutter/packages/flutter/lib" />
       <root url="file://C:/Flutter/flutter/packages/flutter_test/lib" />
       <root url="file://C:/Flutter/flutter/packages/flutter_web_plugins/lib" />
-      <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/git/Parse-SDK-Flutter-b09fb71e34ac5096973f5f80462540d933f1baeb/packages/dart/lib" />
-      <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/git/Parse-SDK-Flutter-b09fb71e34ac5096973f5f80462540d933f1baeb/packages/flutter/lib" />
+      <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/git/Parse-SDK-Flutter-49b505500da75f6e1b88af0940ec7d324037faca/packages/flutter/lib" />
+      <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/git/Parse-SDK-Flutter-e0253b4a050882156e3c65c142f7ada809e79312/packages/dart/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/archive-3.1.2/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/async-2.5.0/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/audio_service-0.17.0/lib" />
