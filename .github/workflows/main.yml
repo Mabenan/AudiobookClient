@@ -36,7 +36,7 @@ jobs:
     - run: flutter doctor -v
     - run: flutter build apk
     - uses: actions/upload-artifact@master
-       with:
+      with:
         name: release.apk
         path: build/app/outputs/apk/release/app-release.apk
   deploy:
@@ -45,7 +45,7 @@ jobs:
     environment: deploy
     steps:
     - uses: actions/download-artifact@master
-        with:
+      with:
          name: release.apk
          path: ./output/catbooks.apk
     - uses: easingthemes/ssh-deploy@v2.1.5
