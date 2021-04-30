@@ -1,4 +1,4 @@
-import 'package:audiobookclient/data/album.dart';
+import 'package:catbooks/data/album.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 import '../globals.dart' as globals;

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/audiobookclient.iml" filepath="$PROJECT_DIR$/audiobookclient.iml" />
-      <module fileurl="file://$PROJECT_DIR$/android/audiobookclient_android.iml" filepath="$PROJECT_DIR$/android/audiobookclient_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/catbooks.iml" filepath="$PROJECT_DIR$/catbooks.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/catbooks_android.iml" filepath="$PROJECT_DIR$/android/catbooks_android.iml" />
     </modules>
   </component>
 </project>

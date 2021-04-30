@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
-project(audiobookclient LANGUAGES CXX)
+project(catbooks LANGUAGES CXX)
 
-set(BINARY_NAME "audiobookclient")
+set(BINARY_NAME "catbooks")
 
 cmake_policy(SET CMP0063 NEW)
 

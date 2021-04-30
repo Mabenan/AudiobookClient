@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:audiobookclient/bookdownloader.dart';
-import 'package:audiobookclient/detail.dart';
+import 'package:catbooks/bookdownloader.dart';
+import 'package:catbooks/detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

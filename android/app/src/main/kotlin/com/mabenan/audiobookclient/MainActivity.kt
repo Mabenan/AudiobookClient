@@ -1,4 +1,4 @@
-package com.mabenan.audiobookclient
+package com.mabenan.catbooks
 
 import io.flutter.embedding.android.FlutterActivity
 

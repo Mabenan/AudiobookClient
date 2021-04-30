@@ -39,7 +39,7 @@ jobs:
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
         ARGS: "-rltgoDzvO"
-        SOURCE: "build/app/flutter-apk/apk-release.apk"
+        SOURCE: "build/app/outputs/apk/release/app-release.apk"
         REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
         REMOTE_USER: ${{ secrets.REMOTE_USER }}
         TARGET: ${{ secrets.REMOTE_TARGET }}

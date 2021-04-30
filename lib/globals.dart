@@ -1,6 +1,6 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:audiobookclient/background.dart';
-import 'package:audiobookclient/data/listening.dart';
+import 'package:catbooks/background.dart';
+import 'package:catbooks/data/listening.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';

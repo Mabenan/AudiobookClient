@@ -1,7 +1,7 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:audiobookclient/detail.dart';
-import 'package:audiobookclient/library.dart';
-import 'package:audiobookclient/login.dart';
+import 'package:catbooks/detail.dart';
+import 'package:catbooks/library.dart';
+import 'package:catbooks/login.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';

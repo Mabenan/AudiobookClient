@@ -1,6 +1,6 @@
 {
-    "name": "audiobookclient",
-    "short_name": "audiobookclient",
+    "name": "catbooks",
+    "short_name": "catbooks",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
