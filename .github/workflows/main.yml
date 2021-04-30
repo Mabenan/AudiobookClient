@@ -47,12 +47,12 @@ jobs:
     - uses: actions/download-artifact@master
         with:
          name: release.apk
-         path: ./app-release.apk
+         path: ./output/catbooks.apk
     - uses: easingthemes/ssh-deploy@v2.1.5
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
         ARGS: "-t"
-        SOURCE: "./app-release.apk"
+        SOURCE: "./output/"
         REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
         REMOTE_USER: ${{ secrets.REMOTE_USER }}
         TARGET: ${{ secrets.REMOTE_TARGET }}

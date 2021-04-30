@@ -320,14 +320,14 @@
         <entry key="parse_server_sdk">
           <value>
             <list>
-              <option value="$USER_HOME$/AppData/Local/Pub/Cache/git/Parse-SDK-Flutter-e0253b4a050882156e3c65c142f7ada809e79312/packages/dart/lib" />
+              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/parse_server_sdk-3.0.0/lib" />
             </list>
           </value>
         </entry>
         <entry key="parse_server_sdk_flutter">
           <value>
             <list>
-              <option value="$USER_HOME$/AppData/Local/Pub/Cache/git/Parse-SDK-Flutter-49b505500da75f6e1b88af0940ec7d324037faca/packages/flutter/lib" />
+              <option value="$USER_HOME$/AppData/Local/Pub/Cache/git/Parse-SDK-Flutter-ab9a1bcb6702a3abce5e56b057688210e00a24fc/packages/flutter/lib" />
             </list>
           </value>
         </entry>
@@ -418,7 +418,7 @@
         <entry key="sembast">
           <value>
             <list>
-              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/sembast-3.0.0+4/lib" />
+              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/sembast-3.0.2/lib" />
             </list>
           </value>
         </entry>
@@ -611,8 +611,7 @@
       <root url="file://C:/Flutter/flutter/packages/flutter/lib" />
       <root url="file://C:/Flutter/flutter/packages/flutter_test/lib" />
       <root url="file://C:/Flutter/flutter/packages/flutter_web_plugins/lib" />
-      <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/git/Parse-SDK-Flutter-49b505500da75f6e1b88af0940ec7d324037faca/packages/flutter/lib" />
-      <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/git/Parse-SDK-Flutter-e0253b4a050882156e3c65c142f7ada809e79312/packages/dart/lib" />
+      <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/git/Parse-SDK-Flutter-ab9a1bcb6702a3abce5e56b057688210e00a24fc/packages/flutter/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/archive-3.1.2/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/args-2.0.0/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/async-2.5.0/lib" />
@@ -655,6 +654,7 @@
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/package_info_plus_platform_interface-1.0.0/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/package_info_plus_web-1.0.0/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/package_info_plus_windows-1.0.0/lib" />
+      <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/parse_server_sdk-3.0.0/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/path-1.8.0/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/path_provider-2.0.1/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/path_provider_linux-2.0.0/lib" />
@@ -667,7 +667,7 @@
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/plugin_platform_interface-2.0.0/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/process-4.2.1/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/rxdart-0.26.0/lib" />
-      <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/sembast-3.0.0+4/lib" />
+      <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/sembast-3.0.2/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/sembast_web-2.0.0+2/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/shared_preferences-2.0.5/lib" />
       <root url="file://$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/shared_preferences_linux-2.0.0/lib" />

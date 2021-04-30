@@ -19,6 +19,11 @@ class _LoginWidgetState extends State<LoginWidget> {
     ParseResponse resp = await user.login();
     if (resp.success) {
       Navigator.pushReplacementNamed(context, "init");
+    } else {
+      showDialog(
+          context: context,
+          builder: (cntx) =>
+              AlertDialog(title: Text("Login Failed: " + resp.error.message)));
     }
   }
 
@@ -31,10 +36,14 @@ class _LoginWidgetState extends State<LoginWidget> {
         ParseResponse resp = await user.getUpdatedUser();
         if (resp.success) {
           globals.forcedOffline = false;
-        }else{
+        } else {
           globals.forcedOffline = true;
+          showDialog(
+              context: context,
+              builder: (cntx) => AlertDialog(
+                  title: Text("Login Failed: " + resp.error.message)));
         }
-      }else{
+      } else {
         Navigator.pushReplacementNamed(context, "init");
       }
     }
