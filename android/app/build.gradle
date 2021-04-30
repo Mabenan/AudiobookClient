@@ -35,6 +35,10 @@ android {
         disable 'InvalidPackage'
         warningsAsErrors false
         ignoreWarnings true
+        checkAllWarnings false
+        checkReleaseBuilds false
+        quiet true
+        abortOnError false
     }
 
     defaultConfig {
