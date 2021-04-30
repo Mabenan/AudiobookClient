@@ -13,7 +13,7 @@
   <component name="ChangeListManager">
     <list default="true" id="47236be6-8abb-44c4-9dd9-43ab8f85ab0b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,7 +140,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619765718274</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="perperation for release 2.0&#10;ignore warnings">
+      <created>1619766213863</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1619766213863</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -187,11 +194,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="815" y="285" key="AndroidProcessChooserDialog/-1920.0.1536.832/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1617962355683" />
-    <state x="520" y="114" key="CommitChangelistDialog2" timestamp="1619765716541">
+    <state x="520" y="114" key="CommitChangelistDialog2" timestamp="1619766519204">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="520" y="114" key="CommitChangelistDialog2/-1920.0.1536.832/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1618398561670" />
-    <state x="520" y="114" key="CommitChangelistDialog2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1619765716541" />
+    <state x="520" y="114" key="CommitChangelistDialog2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1619766519204" />
     <state width="640" height="438" key="DebuggerActiveHint" timestamp="1618065165614">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -259,11 +266,11 @@
     </state>
     <state x="600" y="208" key="SettingsEditor/-1920.0.1536.832/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1617955125215" />
     <state x="600" y="208" key="SettingsEditor/-1920.0.1536.832/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1617697556432" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1619765729244">
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1619766214992">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="253" key="Vcs.Push.Dialog.v2/-1920.0.1536.832/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1618398565786" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1619765729244" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1619766214992" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1617798463404">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
