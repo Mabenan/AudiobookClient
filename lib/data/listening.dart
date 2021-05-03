@@ -194,7 +194,7 @@ class Listenings {
   Future<Null> _init() async {
     await _load();
 
-    if (this.syncProc == null) {
+    if (this.syncProc == null && globals.isBack) {
       this.syncProc = Stream.periodic(Duration(seconds: 10), (comp) async {
         await _sync();
       }).listen((comp) {

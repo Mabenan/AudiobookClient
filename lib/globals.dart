@@ -51,8 +51,9 @@ Future<bool> isOffline() async {
     }
   }
 }
-
+bool isBack = false;
 initParse({bool back = false}) async {
+  isBack = back;
   Map<String, ParseObjectConstructor> subclassMap = {
     "Album": () => Album(),
     "Track": () => Track(),
