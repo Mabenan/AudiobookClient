@@ -31,12 +31,12 @@ jobs:
       with:
         channel: 'stable' # or: 'beta', 'dev' or 'master'
     - run: echo $KEY_JKS > key.jks
-        env:
-          KEY_JKS: ${{ secrets.KEY_JKS }}
+      env:
+        KEY_JKS: ${{ secrets.KEY_JKS }}
     - run: flutter pub get
     - run: flutter build apk --release
-        env:
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      env:
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
