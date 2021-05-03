@@ -11,23 +11,3 @@ Description: |-
 RepoType: git
 Repo: https://github.com/Mabenan/AudiobookClient
 
-# At least one for new apps
-Builds:
-  - versionName: '1.0'
-    versionCode: 1
-    commit: v1.0
-    output: build/app/outputs/apk/fdroid/release/app-fdroid-release.apk
-      srclibs:
-        # I usually use the dev version of flutter, but beta and removing the @ altogether works too.
-        - flutter@dev
-      prebuild: rm -fr ios # iOS folder has binaries sometimes
-      build: |-
-        export PATH=$$flutter$$/bin:$PATH && flutter build apk --flavor fdroid
-    # output: some.apk
-    # prebuild: sed -i -e
-
-# For a complete list of possible flags, see the manual
-
-# MaintainerNotes: |-
-#     Here go the notes to take into account for future updates, builds, etc.
-#     Will be published in the wiki if present.
