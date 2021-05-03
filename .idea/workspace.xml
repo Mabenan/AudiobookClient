@@ -13,7 +13,10 @@
   <component name="ChangeListManager">
     <list default="true" id="47236be6-8abb-44c4-9dd9-43ab8f85ab0b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/main.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/main.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,6 +78,11 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="dart.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\drichte\Documents\Audiobook\AudiobookClient" />
+    </key>
   </component>
   <component name="RunManager" selected="Flutter.main.dart">
     <configuration name="woDebug" type="FlutterRunConfigurationType" factoryName="Flutter">
@@ -216,7 +224,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620035842023</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="perperation for release 2.0&#10;perpare for fdroid">
+      <created>1620041942305</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1620041942305</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -258,20 +273,20 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/-1920.0.1536.832/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1617959800474" />
-    <state x="649" y="323" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1619785204279">
+    <state x="649" y="323" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1620042908180">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="649" y="323" key="#com.intellij.fileTypes.FileTypeChooser/-1920.0.1536.832/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1618395869496" />
-    <state x="649" y="323" key="#com.intellij.fileTypes.FileTypeChooser/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1619785204279" />
+    <state x="649" y="323" key="#com.intellij.fileTypes.FileTypeChooser/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1620042908180" />
     <state x="815" y="285" key="AndroidProcessChooserDialog" timestamp="1617962355683">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="815" y="285" key="AndroidProcessChooserDialog/-1920.0.1536.832/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1617962355683" />
-    <state x="520" y="114" key="CommitChangelistDialog2" timestamp="1620035839882">
+    <state x="520" y="114" key="CommitChangelistDialog2" timestamp="1620041940678">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="520" y="114" key="CommitChangelistDialog2/-1920.0.1536.832/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1618398561670" />
-    <state x="520" y="114" key="CommitChangelistDialog2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1620035839882" />
+    <state x="520" y="114" key="CommitChangelistDialog2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1620041940678" />
     <state x="2440" y="114" key="CommitChangelistDialog2/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1619777815909" />
     <state width="640" height="438" key="DebuggerActiveHint" timestamp="1618065165614">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -344,11 +359,11 @@
     </state>
     <state x="600" y="208" key="SettingsEditor/-1920.0.1536.832/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1617955125215" />
     <state x="600" y="208" key="SettingsEditor/-1920.0.1536.832/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1617697556432" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1620035843811">
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1620041989472">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="253" key="Vcs.Push.Dialog.v2/-1920.0.1536.832/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1618398565786" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1620035843811" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1620041989472" />
     <state x="2472" y="253" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1619777818571" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1617798463404">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -375,10 +390,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="673" y="311" key="git4idea.merge.GitPullDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1620026799391" />
-    <state x="715" y="365" key="git4idea.ui.GitTagDialog" timestamp="1620035826875">
+    <state x="715" y="365" key="git4idea.ui.GitTagDialog" timestamp="1620041962313">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="715" y="365" key="git4idea.ui.GitTagDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1620035826875" />
+    <state x="715" y="365" key="git4idea.ui.GitTagDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1620041962313" />
     <state x="616" y="240" key="run.anything.popup" timestamp="1617966231682">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
