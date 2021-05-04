@@ -154,7 +154,6 @@ class AudioPlayerTask extends BackgroundAudioTask {
         await user.getUpdatedUser();
       }
     }
-
     await player.setAudioSource(source, preload: false);
     player.positionStream.listen((event) async {
       try {
@@ -171,20 +170,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
           if (player.playerState.playing) {
             _listening.progress = player.position.inSeconds;
           }
-          AudioServiceBackground.sendCustomEvent({
-            "event": "progress",
-            "data": {
-              "album": this._currentAlbum.objectId,
-              "track": currentTrack.objectId,
-              "progress": _listening.progress,
-            },
-          });
-          AudioServiceBackground.sendCustomEvent({
-            "event": "sleepTimer",
-            "data": {
-              "sleepCountdown": sleepCountdown
-            },
-          });
+          sendStreams();
         }
       } catch (ex) {}
     });
@@ -209,6 +195,28 @@ class AudioPlayerTask extends BackgroundAudioTask {
           MediaControl.stop,
         ],
       );
+    });
+
+    Stream.periodic(new Duration(seconds: 5), (comp) => comp).listen((event) {
+      if(_listening != null)
+        sendStreams();
+    });
+  }
+
+  void sendStreams() {
+    AudioServiceBackground.sendCustomEvent({
+      "event": "progress",
+      "data": {
+        "album": this._currentAlbum.objectId,
+        "track": _listening.track,
+        "progress": _listening.progress,
+      },
+    });
+    AudioServiceBackground.sendCustomEvent({
+      "event": "sleepTimer",
+      "data": {
+        "sleepCountdown": sleepCountdown
+      },
     });
   }
 
@@ -281,17 +289,8 @@ class AudioPlayerTask extends BackgroundAudioTask {
   onPause() => player.pause();
   onSeekTo(Duration duration) => player.seek(duration);
   onSetSpeed(double speed) => player.setSpeed(speed);
-  onSeekBackward(bool begin) async {
-    if (begin) {
-      return player.seek(new Duration());
-    } else {
-      return player.seekToPrevious();
-    }
-  }
-
-  onSeekForward(bool begin) async {
-    return player.seekToNext();
-  }
+  onSkipToNext() => player.seekToNext();
+  onSkipToPrevious() => player.seekToPrevious();
 
   sleepTimer(int i) async{
 

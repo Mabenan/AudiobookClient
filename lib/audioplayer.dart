@@ -116,7 +116,7 @@ class _AudioPlayerState extends State<AudioplayerWidget> {
         child: GestureDetector(
       child: Icon(Icons.skip_next_outlined, size: 50),
       onTap: () {
-        AudioService.seekForward(false);
+        AudioService.skipToNext();
       },
     ));
   }
@@ -129,7 +129,7 @@ class _AudioPlayerState extends State<AudioplayerWidget> {
         if (currentPlayerStream.progress > 10) {
           AudioService.seekTo(Duration(seconds: 0));
         } else {
-          AudioService.seekBackward(false);
+          AudioService.skipToPrevious();
         }
       },
     ));
