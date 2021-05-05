@@ -12,21 +12,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="47236be6-8abb-44c4-9dd9-43ab8f85ab0b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/background.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/background.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/bookdownloader.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/bookdownloader.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/data/listening.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data/listening.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/data/track.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data/track.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/init.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/init.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/library.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/library.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="6PQ0218205013353" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="DebugClient" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -326,7 +319,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620126962089</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="release 3.0">
+      <created>1620216070033</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1620216070033</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -354,7 +354,8 @@
     <MESSAGE value="perperation for release 2.0&#10;perpare for fdroid" />
     <MESSAGE value="improving behaviour for background listening" />
     <MESSAGE value="bump Version" />
-    <option name="LAST_COMMIT_MESSAGE" value="bump Version" />
+    <MESSAGE value="release 3.0" />
+    <option name="LAST_COMMIT_MESSAGE" value="release 3.0" />
   </component>
   <component name="WindowStateProjectService">
     <state x="477" y="252" key="#PSD" timestamp="1620127745660">
@@ -380,11 +381,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="815" y="285" key="AndroidProcessChooserDialog/-1920.0.1536.832/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1617962355683" />
-    <state x="520" y="114" key="CommitChangelistDialog2" timestamp="1620126960677">
+    <state x="520" y="114" key="CommitChangelistDialog2" timestamp="1620216068393">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="520" y="114" key="CommitChangelistDialog2/-1920.0.1536.832/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1618398561670" />
-    <state x="520" y="114" key="CommitChangelistDialog2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1620126960677" />
+    <state x="520" y="114" key="CommitChangelistDialog2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1620216068393" />
     <state x="2440" y="114" key="CommitChangelistDialog2/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1619777815909" />
     <state width="640" height="438" key="DebuggerActiveHint" timestamp="1620212808460">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -462,11 +463,11 @@
     </state>
     <state x="600" y="208" key="SettingsEditor/-1920.0.1536.832/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1617955125215" />
     <state x="600" y="208" key="SettingsEditor/-1920.0.1536.832/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1617697556432" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1620126963524">
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1620216071409">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="253" key="Vcs.Push.Dialog.v2/-1920.0.1536.832/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1618398565786" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1620126963524" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1620216071409" />
     <state x="2472" y="253" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1619777818571" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1617798463404">
       <screen x="0" y="0" width="1920" height="1040" />
