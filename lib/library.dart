@@ -13,15 +13,16 @@ class LibraryWidget extends StatefulWidget {
 }
 
 class _LibraryWidgetState extends State<LibraryWidget> {
+  bool _loadInProgress = false;
+
   _LibraryWidgetState();
   List<Album> _albums = [];
   @override
   Widget build(BuildContext context) {
-    Albums().getAll().then((value) => {
-          setState(() {
-            _albums = value;
-          })
-        });
+    if(_albums.length == 0
+    && !_loadInProgress){
+      getData();
+    }
     return Container(
       child: _albums.length != 0
           ? getList(context)
@@ -54,7 +55,8 @@ class _LibraryWidgetState extends State<LibraryWidget> {
                     BookMaster.buildDownloadProgress(album),
                   ],
                 ),
-                onTap: () => Navigator.of(context).pushNamed("main/detail", arguments: DetailRouteArguments(album: album)),
+                onTap: () => Navigator.of(context).pushNamed("main/detail",
+                    arguments: DetailRouteArguments(album: album)),
               ),
             ),
             StreamBuilder<bool>(
@@ -85,8 +87,7 @@ class _LibraryWidgetState extends State<LibraryWidget> {
                           padding: EdgeInsets.only(right: 10),
                           child: Icon(Icons.play_circle_fill, size: 30),
                         ),
-                        onTap: () =>
-                            {BookMaster().getBook(album).play()},
+                        onTap: () => {BookMaster().getBook(album).play()},
                       )
                     : Container();
               },
@@ -118,11 +119,34 @@ class _LibraryWidgetState extends State<LibraryWidget> {
   }
 
   Future<void> getData() async {
+    _loadInProgress = true;
     print("refresh");
     await Albums().refresh(fromServer: true);
     var alb = await Albums().getAll();
     setState(() {
       _albums = alb;
     });
+    sortAlb(alb);
+  }
+
+  Future sortAlb(List<Album> alb) async {
+
+    Map<String, bool> downloaded = {};
+    for (var a in alb) {
+      downloaded[a.name] = await BookMaster().getBook(a).canPlaySync();
+    }
+    alb.sort((a, b) {
+      if (downloaded[a.name] && !downloaded[b.name]) {
+        return -1;
+      } else if (!downloaded[a.name] && downloaded[b.name]) {
+        return 1;
+      } else {
+        return a.name.compareTo(b.name);
+      }
+    });
+    setState(() {
+      _albums = alb;
+    });
+    _loadInProgress = false;
   }
 }

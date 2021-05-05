@@ -1,3 +1,4 @@
+import 'package:catbooks/bookdownloader.dart';
 import 'package:flutter/material.dart';
 
 import 'data/album.dart';
@@ -10,7 +11,7 @@ class InitWidget extends StatefulWidget {
 
 
 class _InitWidgetState extends State<InitWidget> {
-  int albumSum = 0;
+  int albumSum = 1;
   int albumLoaded = 0;
 
   _InitWidgetState() : super(){

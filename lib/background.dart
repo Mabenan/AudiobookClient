@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'data/album.dart';
 import 'data/listening.dart';
+import 'package:catbooks/bookdownloader.dart';
 import 'data/track.dart';
 import 'package:rxdart/rxdart.dart';
 import 'globals.dart' as globals;
@@ -30,8 +31,19 @@ class AudioPlayerFrontendService {
   }
   AudioPlayerFrontendService._internal() {
     AudioService.start(backgroundTaskEntrypoint: _entrypoint).then((value) {
-      Listenings().getLast().then((value) async {
-        await AudioService.customAction("playAlbum", value.album);
+      ParseCoreData().getStore().getString("lastAlbum").then((value) async {
+        if(value != "") {
+          var alb = await Albums().get(value);
+          if(alb != null) {
+            if (await BookMaster()
+                .getBook(alb)
+                .canPlaySync()) {
+              await AudioService.customAction("playAlbum", value);
+            }
+          }
+        }
+      }).catchError((err){
+
       });
       AudioService.runningStream.listen((event) {
         if(!event){
@@ -79,6 +91,7 @@ class AudioPlayerFrontendService {
   }
 
   playAlbum(Album album) async {
+    await ParseCoreData().getStore().setString("lastAlbum", album.objectId);
     await AudioService.customAction("playAlbum", album.objectId);
     AudioService.play();
   }
@@ -112,7 +125,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
   bool _playAfterClear;
 
-  int sleepCountdown;
+  int sleepCountdown = 0;
 
   StreamSubscription<Null> sub;
 
@@ -197,7 +210,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
       );
     });
 
-    Stream.periodic(new Duration(seconds: 5), (comp) => comp).listen((event) {
+    new Stream.periodic(new Duration(seconds: 5), (comp) => comp).listen((event) {
       if(_listening != null)
         sendStreams();
     });
@@ -250,7 +263,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
           AudioSource.uri(
               Uri.file(directory.path + "/audioBooks/" + e.get("File")))));
       await source.addAll(trackSources);
-      await player.seek(startDuration, index: start);
+      await player.setAudioSource(source, preload: true, initialPosition: startDuration, initialIndex: start);
     } catch (ex) {
       return;
     }

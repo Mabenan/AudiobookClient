@@ -69,6 +69,9 @@ class Book {
   int downloadSize = 0;
   int totalDownload = 0;
   bool downloadRunning = false;
+
+  var _initFuture;
+  var inInit = false;
   Stream<DownloadProgress> get progressStream => _progress.stream;
   Stream<bool> get canDownload => _canDownload.stream;
   Stream<bool> get canPlay => _canPlay.stream;
@@ -76,7 +79,14 @@ class Book {
   Book(this.album) {
     _canDownload.add(false);
     _canPlay.add(false);
-    init();
+    _initFuture = init();
+  }
+
+  canPlaySync() async {
+    if(inInit){
+      await _initFuture;
+    }
+    return _canPlay.value;
   }
 
   play() async {
@@ -84,6 +94,7 @@ class Book {
   }
 
   init() async {
+    inInit = true;
     tracksToFetch.clear();
     await this.getTracks();
     await Future.forEach(
@@ -95,6 +106,7 @@ class Book {
           (a, b) => (a.get("Order") as int).compareTo((b.get("Order") as int)));
       _canPlay.add(true);
     }
+    inInit = false;
   }
 
   download(Track track) async {

@@ -126,7 +126,8 @@ class Tracks {
     List<String> trackIds = await ParseCoreData()
         .getStore()
         .getStringList(album.objectId + "tracks");
-    if (trackIds != null) {
+    if (trackIds != null
+    && trackIds.length > 0) {
       returnedTracks = [];
       await Future.forEach(trackIds, (e) async {
         returnedTracks.add(await get(e));
@@ -146,6 +147,8 @@ class Tracks {
         }
       }
     }
+    if (returnedTracks == null) {returnedTracks = [];}
+
     return returnedTracks;
   }
 }

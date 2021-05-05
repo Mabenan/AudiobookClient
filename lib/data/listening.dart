@@ -269,7 +269,8 @@ class Listenings {
   Future<LocalListening> getAlbum(Album album) async {
     await _load();
     if (_listenings.length > 0) {
-      return _listenings.values.firstWhere(
+      return (List<LocalListening>.from(_listenings.values)
+        ..sort((a, b) => b.updated.compareTo(a.updated))).firstWhere(
           (element) => element.album == album.objectId,
           orElse: () => null);
     } else {
