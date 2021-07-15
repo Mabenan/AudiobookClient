@@ -30,13 +30,10 @@ jobs:
     - uses: subosito/flutter-action@v1
       with:
         channel: 'stable' # or: 'beta', 'dev' or 'master'
-    - run: echo $KEY_JKS > key.txt
-      env:
-        KEY_JKS: ${{ secrets.KEY_JKS }}
-    - run: echo "$(cat key.txt)"
     - run: echo $KEY_JKS | base64 -d > key.jks
       env:
         KEY_JKS: ${{ secrets.KEY_JKS }}
+    - run: echo "$(cat key.jks)"
     - run: flutter pub get
     - run: flutter build apk --release
       env:
