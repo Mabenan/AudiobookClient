@@ -61,7 +61,7 @@ initParse({bool back = false}) async {
   if (back) subclassMap.addAll({"Listening": () => Listening()}); //This is to ensure that only in Backend the Listenings are loaded
   Future<ParseResponse> resp;
   if (const bool.fromEnvironment("DEBUG_SERVER")) {
-    Parse server = await Parse().initialize("ABCDEFG",
+    Parse server = await Parse().initialize("com.mabenan.catbooks",
         kIsWeb ? "http://localhost:13371/" : "http://10.0.2.2:13371/",
         appName: "audiobook",
         appVersion: "Version 1",
@@ -75,7 +75,7 @@ initParse({bool back = false}) async {
     resp = server.healthCheck();
   } else {
     Parse server = await Parse().initialize(
-        "VZVLcsw29sjuF0QHui7v", "http://node:13391/",
+        "com.mabenan.catbooks", "http://node:13391/",
         appName: "audiobook",
         appVersion: "Version 1",
         appPackageName: "com.mabenan.audiobook",
@@ -88,7 +88,7 @@ initParse({bool back = false}) async {
     var resp2 = await resp;
     if (!resp2.success) {
       server = await Parse().initialize(
-          "VZVLcsw29sjuF0QHui7v", "https://audiobook.mabenan.de/",
+          "com.mabenan.catbooks", "https://audiobook.mabenan.de/",
           appName: "audiobook",
           appVersion: "Version 1",
           appPackageName: "com.mabenan.audiobook",
