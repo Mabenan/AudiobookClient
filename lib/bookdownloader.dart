@@ -126,7 +126,8 @@ class Book {
     var uri = Uri.parse(ParseCoreData().serverUrl + "/stream/" + fileUrl);
     final request = http.Request('GET', uri);
     request.headers
-        .addAll({"x-parse-session-token": ParseCoreData().sessionId});
+        .addAll({"X-Parse-Session-Token": ParseCoreData().sessionId,
+      "X-Parse-Application-Id": ParseCoreData().applicationId});
     try {
       final http.StreamedResponse resp = await http.Client().send(request);
       await for (List<int> event in resp.stream) {

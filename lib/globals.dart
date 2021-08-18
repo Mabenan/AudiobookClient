@@ -62,7 +62,7 @@ initParse({bool back = false}) async {
   Future<ParseResponse> resp;
   if (const bool.fromEnvironment("DEBUG_SERVER")) {
     Parse server = await Parse().initialize("com.mabenan.catbooks",
-        kIsWeb ? "http://localhost:13371/" : "http://10.0.2.2:13371/",
+        kIsWeb ? "http://localhost:13371/" : "http://node:13391/",
         appName: "CatBooks",
         appVersion: "Version 1",
         appPackageName: "com.mabenan.catbooks",
@@ -71,7 +71,7 @@ initParse({bool back = false}) async {
         autoSendSessionId: true,
         registeredSubClassMap: subclassMap,
         liveQueryUrl:
-            kIsWeb ? "http://localhost:13371/" : "http://10.0.2.2:13371/");
+            kIsWeb ? "http://localhost:13391/" : "http://node:13391/");
     resp = server.healthCheck();
   } else {
     Parse server = await Parse().initialize(
