@@ -8,7 +8,7 @@
         android:icon="@mipmap/ic_launcher"
        android:usesCleartextTraffic="true">
         <activity
-            android:name=".MainActivity"
+            android:name="com.ryanheise.audioservice.AudioServiceActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -41,11 +41,12 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
        <service android:name="com.ryanheise.audioservice.AudioService">
-       <intent-filter>
-           <action android:name="android.media.browse.MediaBrowserService" />
-       </intent-filter>
-   </service>
+           <intent-filter>
+               <action android:name="android.media.browse.MediaBrowserService" />
+           </intent-filter>
+       </service>
 
        <receiver android:name="com.ryanheise.audioservice.MediaButtonReceiver" >
            <intent-filter>

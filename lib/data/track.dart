@@ -136,7 +136,8 @@ class Tracks {
     if (returnedTracks == null) {
       var tracks = await (QueryBuilder<Track>(Track())
             ..whereRelatedTo("Tracks", "Album", album.objectId)
-            ..orderByAscending("Order"))
+            ..orderByAscending("Order")
+        ..setLimit(100000000))
           .query();
       if (tracks.success) {
         if (tracks.results != null) {

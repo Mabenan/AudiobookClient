@@ -31,9 +31,6 @@ set offline(value) {
   if (value != null) {
     ParseCoreData().getStore().setBool("offline", value);
     _offline = value;
-    if(AudioService.running) {
-      AudioPlayerFrontendService().offline(value);
-    }
   } else {
     ParseCoreData().getStore().setBool("offline", false);
     _offline = false;

@@ -38,7 +38,7 @@ class AudioPlayerFrontendService {
             if (await BookMaster()
                 .getBook(alb)
                 .canPlaySync()) {
-              await AudioService.customAction("playAlbum", value);
+              await AudioService.customAction("playAlbum", {"value" : value});
             }
           }
         }
@@ -73,11 +73,11 @@ class AudioPlayerFrontendService {
   }
 
   offline(bool value) async{
-    await AudioService.customAction("offline", value);
+    await AudioService.customAction("offline", {"value" : value});
   }
 
   sleepTimer(int i) async{
-    await AudioService.customAction("sleepTimer", i);
+    await AudioService.customAction("sleepTimer", {"value" : i });
   }
 
   play() async {
@@ -85,14 +85,14 @@ class AudioPlayerFrontendService {
       await AudioService.start(backgroundTaskEntrypoint: _entrypoint);
 
       var value = await Listenings().getLast();
-      await AudioService.customAction("playAlbum", value.album);
+      await AudioService.customAction("playAlbum", {"value" : value.album});
     }
     AudioService.play();
   }
 
   playAlbum(Album album) async {
     await ParseCoreData().getStore().setString("lastAlbum", album.objectId);
-    await AudioService.customAction("playAlbum", album.objectId);
+    await AudioService.customAction("playAlbum", {"value" : album.objectId});
     AudioService.play();
   }
 
@@ -140,13 +140,13 @@ class AudioPlayerTask extends BackgroundAudioTask {
   onCustomAction(name, arguments) async {
     switch (name) {
       case "playAlbum":
-        await playAlbum(arguments);
+        await playAlbum(arguments["value"]);
         break;
       case "sleepTimer":
-        await sleepTimer(arguments);
+        await sleepTimer(arguments["value"]);
         break;
       case "offline":
-        await offline(arguments);
+        await offline(arguments["value"]);
     }
   }
 
@@ -193,8 +193,8 @@ class AudioPlayerTask extends BackgroundAudioTask {
         playing: playerState.playing,
         // Every state from the audio player gets mapped onto an audio_service state.
         processingState: {
-          ProcessingState.idle: AudioProcessingState.none,
-          ProcessingState.loading: AudioProcessingState.connecting,
+          ProcessingState.idle: AudioProcessingState.idle,
+          ProcessingState.loading: AudioProcessingState.loading,
           ProcessingState.buffering: AudioProcessingState.buffering,
           ProcessingState.ready: AudioProcessingState.ready,
           ProcessingState.completed: AudioProcessingState.completed,
@@ -280,8 +280,8 @@ class AudioPlayerTask extends BackgroundAudioTask {
       playing: player.playerState.playing,
       // Every state from the audio player gets mapped onto an audio_service state.
       processingState: {
-        ProcessingState.idle: AudioProcessingState.none,
-        ProcessingState.loading: AudioProcessingState.connecting,
+        ProcessingState.idle: AudioProcessingState.idle,
+        ProcessingState.loading: AudioProcessingState.loading,
         ProcessingState.buffering: AudioProcessingState.buffering,
         ProcessingState.ready: AudioProcessingState.ready,
         ProcessingState.completed: AudioProcessingState.completed,

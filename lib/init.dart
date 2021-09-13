@@ -22,6 +22,7 @@ class _InitWidgetState extends State<InitWidget> {
       });
       for (var album in albums) {
         await Tracks().getAlbum(album);
+        await BookMaster().getBook(album).canPlaySync();
         setState(() {
           albumLoaded++;
         });

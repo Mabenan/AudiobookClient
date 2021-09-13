@@ -7,6 +7,10 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <application android:usesCleartextTraffic="true">
+
+        <activity android:name="com.ryanheise.audioservice.AudioServiceActivity">
+
+    </activity>
         <service android:name="com.ryanheise.audioservice.AudioService">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />

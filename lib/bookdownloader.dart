@@ -97,14 +97,26 @@ class Book {
     inInit = true;
     tracksToFetch.clear();
     await this.getTracks();
-    await Future.forEach(
-        tracks, (element) async => {await getTrackLength(element)});
-    if (tracksToFetch.length > 0) {
-      _canDownload.add(true);
-    } else {
-      tracksDownloaded.sort(
-          (a, b) => (a.get("Order") as int).compareTo((b.get("Order") as int)));
-      _canPlay.add(true);
+    if(tracks.length > 0) {
+      final directory = await getApplicationDocumentsDirectory();
+      var fileUrl = tracks.first.get("File");
+      String path = directory.path + "/audioBooks/" + fileUrl;
+      var file = new File(path);
+      if (file.existsSync()) {
+        await Future.forEach(
+            tracks, (element) async => {await getTrackLength(element)});
+        if (tracksToFetch.length > 0) {
+          _canDownload.add(true);
+        } else {
+          tracksDownloaded.sort(
+                  (a, b) =>
+                  (a.get("Order") as int).compareTo((b.get("Order") as int)));
+          _canPlay.add(true);
+        }
+      }else{
+        _canDownload.add(true);
+        _canPlay.add(false);
+      }
     }
     inInit = false;
   }
