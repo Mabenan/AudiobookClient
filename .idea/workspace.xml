@@ -15,24 +15,38 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="47236be6-8abb-44c4-9dd9-43ab8f85ab0b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/lib/app_ids.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/audio_handler.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/catbooks_app.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/service_provider/audio_service_provider.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/storage.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/windows/album_detail_window.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/windows/local_library_window.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/windows/login_window.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/windows/main_window.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/windows/shop_window.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/debug/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/debug/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/catbooks.iml" beforeDir="false" afterPath="$PROJECT_DIR$/catbooks.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/background.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/background.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/bookdownloader.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/bookdownloader.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/data/track.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data/track.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/generated_plugin_registrant.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/generated_plugin_registrant.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/audioplayer.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/background.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/bookdownloader.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/data/album.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data/album.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/data/listening.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data/listening.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/data/track.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/detail.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/generated_plugin_registrant.dart" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/globals.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/globals.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/init.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/init.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/init.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/library.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/login.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/widget_test.dart" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/windows/flutter/generated_plugin_registrant.h" beforeDir="false" afterPath="$PROJECT_DIR$/windows/flutter/generated_plugin_registrant.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/windows/flutter/generated_plugins.cmake" afterDir="false" />
@@ -57,8 +71,20 @@
         <option name="title" value="All" />
       </GitPushTagMode>
     </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="evolution" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="MERGE" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="GithubPullRequestsUISettings">
     <option name="hiddenUrls">
@@ -66,6 +92,9 @@
         <option value="https://github.com/MAbenan/AudiobookClient" />
       </set>
     </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedIndex" value="1" />
   </component>
   <component name="ProjectId" id="1qYxaes5cVLgRfyGryxgtXSmyuY" />
   <component name="ProjectLevelVcsManager">
@@ -90,15 +119,16 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
+    <property name="settings.editor.selected.configurable" value="editing.templates" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\daniel.albert\StudioProjects\AudiobookClient\lib\windows" />
       <recent name="C:\Users\drichte\Documents\Audiobook\AudiobookClient" />
     </key>
   </component>
-  <component name="RunManager" selected="Flutter.woDebug">
+  <component name="RunManager" selected="Flutter.main.dart">
     <configuration name="woDebug" type="FlutterRunConfigurationType" factoryName="Flutter">
       <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
       <method v="2" />

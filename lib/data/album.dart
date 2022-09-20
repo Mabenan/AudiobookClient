@@ -1,147 +1,202 @@
-
-
+import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' as io;
 
-import 'package:flutter/material.dart';
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/models.dart';
+import 'package:catbooks/app_ids.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:path/path.dart' as path_helper;
 
-import '../globals.dart' as globals;
-class Album extends ParseObject {
-  Album() : super("Album");
-  Album.clone() : this();
+import '../globals.dart';
 
-  @override
-  clone(Map<String, dynamic> map) => Album.clone()..fromJson(map);
+class Album {
+  String id;
+  String name;
+  String author;
+  String cover;
+  List<Track> tracks;
 
-  String get name => get<String>("Name");
-
-  set name(String name) => set<String>("Name", name);
-
-  String get cover => get<String>("Cover");
-
-  set cover(String cover) => set<String>("Cover", cover);
-
-  String get artist => get<String>("Artist");
-
-  set artist(String artist) => set<String>("Artist", artist);
-
-  Image _image50x50;
-
-  Image get image50x50 {
-    if(_image50x50 == null){
-      var bytes = base64.decode(this.cover);
-      _image50x50 = Image.memory(bytes, width: 50, height: 50,);
+  final BehaviorSubject<int> _isDownloaded = BehaviorSubject<int>();
+  Future<Null>? _downloadFuture;
+  Stream<int> get isDownloaded {
+    if (_isDownloaded.value == 0 && _downloadFuture == null) {
+      checkDownload();
     }
-    return _image50x50;
-  }
-  Image _image64x64;
-
-  Image get image64x64{
-    if(_image64x64 == null){
-      var bytes = base64.decode(this.cover);
-      _image64x64 = Image.memory(bytes, width: 64, height: 64,);
-    }
-    return _image64x64;
-  }
-  Image _image256x256;
-
-  Image get image256x256{
-    if(_image256x256 == null){
-      var bytes = base64.decode(this.cover);
-      _image256x256 = Image.memory(bytes, width: 256, height: 256,);
-    }
-    return _image256x256;
+    return _isDownloaded.stream;
   }
 
-  Future<Uri> get imageUri async{
-    var dir = await getApplicationDocumentsDirectory();
-    var path = dir.path + "/thumbs/" + name + ".thumb";
-    File thumb = new File(path);
-    if(!thumb.existsSync()){
-      thumb.createSync(recursive: true);
-      thumb.writeAsBytesSync(base64.decode(cover));
+  Album(
+      {required this.id,
+      required this.name,
+      required this.author,
+      required this.cover,
+      required this.tracks}) {
+    _isDownloaded.add(0);
+  }
+
+  static Album fromJson(Map<String, dynamic> json) {
+    return new Album(
+      id: json["id"],
+      name: json["name"],
+      author: json["author"],
+      cover: json["cover"],
+      tracks: List<Track>.from(
+          (json["tracks"] as Iterable).map((e) => Track.fromJson(e))),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "name": name,
+      "author": author,
+      "cover": cover,
+      "tracks": List.from(tracks.map((e) => e.toJson()))
+    };
+  }
+
+  static Future<Album> fromServer(Document doc) async {
+    return new Album(
+      id: doc.$id,
+      name: doc.data["name"],
+      author: doc.data["author"],
+      cover: doc.data["cover"],
+      tracks: await getTracksFromServer(doc),
+    );
+  }
+
+  dispose() {
+    _isDownloaded.close();
+  }
+
+  static Future<List<Track>> getTracksFromServer(Document doc) async {
+    try {
+      var serverTracks = await Database(client).listDocuments(
+          collectionId: COLLECTION_TRACK, filters: ["album=" + doc.$id]);
+      return List<Track>.from(
+          serverTracks.documents.map((e) => Track.fromServer(e)));
+    } catch (e) {
+      print(e);
+      return List.empty(growable: true);
     }
-    return thumb.uri;
+  }
+
+  download() async {
+    var appDir = await getApplicationDocumentsDirectory();
+    var albumDir = path_helper.join(appDir.path, id);
+    if (!await io.Directory(albumDir).exists()) {
+      io.Directory(albumDir).create(recursive: true);
+    }
+    for (var track in tracks) {
+      var trackFilePath = path_helper.join(appDir.path, id, track.id);
+      io.File file = io.File(trackFilePath);
+      if (!(await file.exists())) {
+        var data = await Storage(client).getFileDownload(fileId: track.fileid);
+        await file.create();
+        await file.writeAsBytes(data);
+      }
+    }
+    checkDownload();
+  }
+
+  void checkDownload() async {
+    if (_downloadFuture != null) await _downloadFuture;
+
+    var completer = Completer<Null>();
+    _downloadFuture = completer.future;
+
+    if (await checkIfTracksDownloaded()) {
+      _isDownloaded.add(1);
+    } else {
+      _isDownloaded.add(2);
+    }
+
+    completer.complete();
+  }
+
+  Future<bool> checkIfTracksDownloaded() async {
+    var appDir = await getApplicationDocumentsDirectory();
+    var notDownloaded = false;
+    for (var track in tracks) {
+      var trackFilePath = path_helper.join(appDir.path, id, track.id);
+      io.File file = io.File(trackFilePath);
+      if (!(await file.exists())) {
+        notDownloaded = true;
+        break;
+      }
+    }
+    return !notDownloaded;
+  }
+
+  Future<void> deleteDownload() async {
+    var appDir = await getApplicationDocumentsDirectory();
+
+    for (var track in tracks) {
+      var trackFilePath = path_helper.join(appDir.path, id, track.id);
+      io.File file = io.File(trackFilePath);
+      if (await file.exists()) {
+        await file.delete();
+        break;
+      }
+    }
+    checkDownload();
+  }
+
+  Future<Uri> getArtUri() async {
+    var appDir = await getApplicationDocumentsDirectory();
+    var artFilePath = path_helper.join(appDir.path, id, "art.jpeg");
+    io.File file = io.File(artFilePath);
+    if (!await file.exists()) {
+      await file.writeAsBytes(base64Decode(cover));
+    }
+    return file.uri;
+
   }
 }
 
-class Albums {
-  static final Albums _singleton = Albums._internal();
-  factory Albums() {
-    return _singleton;
-  }
-  Albums._internal();
+class Track {
+  String id;
+  String name;
+  String fileid;
+  String album;
 
-  bool _loaded = false;
-  Map<String, Album> _albums = {};
+  Track(
+      {required this.id,
+      required this.name,
+      required this.fileid,
+      required this.album});
 
-  Future<Album> get(String objectId) async{
-    if (!_albums.containsKey(objectId)) {
-      Album track = await Album().fromPin(objectId);
-      if (track == null) {
-        ParseResponse resp = await (Album().getObject(objectId)
-          ..catchError((err) {
-            print(err);
-          }));
-        if (resp.success) {
-          resp.result.pin();
-          _albums.addAll({objectId: resp.result});
-        }
-      } else {
-        _albums.addAll({objectId: track});
-      }
-    }
-    return _albums[objectId];
-
+  static Track fromJson(Map<String, dynamic> json) {
+    return new Track(
+        id: json["id"],
+        name: json["name"],
+        fileid: json["fileid"],
+        album: json["album"]);
   }
 
-  refresh({bool fromServer = false}) async{
-    _albums.clear();
-    _loaded = false;
-    await getAll(fromServer: fromServer);
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "name": name,
+      "fileid": fileid,
+      "album": album,
+    };
   }
 
-  Future<List<Album>> getAll({bool fromServer = false}) async {
-    if (!_loaded) {
-      if(fromServer && ! await globals.isOffline()){
-        await ParseCoreData().getStore().remove("albums");
-      }
-      if(await ParseCoreData().getStore().containsKey("albums")) {
-        List<String> albumKeys =
-        await ParseCoreData().getStore().getStringList("albums");
-        for (var albumKey in albumKeys) {
-          Album album = await Album().fromPin(albumKey);
-          if (!_albums.containsKey(albumKey) && album != null) {
-            _albums.addAll({albumKey: album});
-          }
-        }
-        _loaded = true;
-      }
-      if (! await globals.isOffline()) {
-        ParseResponse resp = await (QueryBuilder<Album>(Album())..setLimit(100000000)).query();
-        if (resp.success) {
-          if (resp.results != null) {
-            for (Album album in resp.results) {
-              if (!_albums.containsKey(album.objectId)) {
-                _albums.addAll({album.objectId: album});
-              }
-            }
-            _loaded = true;
-            cache();
-          }
-        }
-      }
-    }
-    return List<Album>.from(_albums.values);
+  static Track fromServer(Document e) {
+    return new Track(
+        id: e.$id,
+        name: e.data["name"],
+        fileid: e.data["fileid"],
+        album: e.data["album"]);
   }
 
-  cache()  async{
-    var albums = List<Album>.from(_albums.values);
-    for (Album album in albums) {
-      await album.pin();
-    }
-    await ParseCoreData().getStore().setStringList("albums", List<String>.from(_albums.keys));
+  Future<Uri> getURI() async {
+    var appDir = await getApplicationDocumentsDirectory();
+    var trackFilePath = path_helper.join(appDir.path, album, id);
+    io.File file = io.File(trackFilePath);
+    return file.uri;
   }
 }
