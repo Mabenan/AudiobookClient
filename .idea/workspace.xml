@@ -15,38 +15,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="47236be6-8abb-44c4-9dd9-43ab8f85ab0b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/app_ids.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/audio_handler.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/catbooks_app.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/service_provider/audio_service_provider.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/storage.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/windows/album_detail_window.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/windows/local_library_window.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/windows/login_window.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/windows/main_window.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/windows/shop_window.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/catbooks.iml" beforeDir="false" afterPath="$PROJECT_DIR$/catbooks.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/audioplayer.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/background.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/bookdownloader.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/data/album.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data/album.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/data/listening.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data/listening.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/data/track.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/detail.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/generated_plugin_registrant.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app_ids.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app_ids.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/data/album.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/data/listening.dart" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/globals.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/globals.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/init.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/library.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/login.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/service_provider/audio_service_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/service_provider/audio_service_provider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/storage.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/windows/album_detail_window.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/windows/album_detail_window.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/windows/local_library_window.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/windows/local_library_window.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/windows/login_window.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/windows/login_window.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/windows/shop_window.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/windows/shop_window.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/widget_test.dart" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/windows/flutter/generated_plugin_registrant.h" beforeDir="false" afterPath="$PROJECT_DIR$/windows/flutter/generated_plugin_registrant.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/windows/flutter/generated_plugins.cmake" afterDir="false" />
@@ -115,7 +98,7 @@
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="D:/catbooks/catbooks_data" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />

@@ -1,7 +1,7 @@
 import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/models.dart';
+import 'package:appwrite/models.dart' as models;
 import 'package:catbooks/globals.dart';
-import 'package:catbooks/storage.dart';
+import 'package:catbooks_data/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -78,13 +78,9 @@ class LoginWindowState extends State<LoginWindow> {
       setState(() {
         _loginRunning = true;
       });
-      var box = await Hive.openBox("user");
-      if (box.containsKey(STORAGE_SESSION_ID)) {
-        String? sessionId = box.get(STORAGE_SESSION_ID);
-        Session? session =
-            await Account(client).getSession(sessionId: sessionId!);
+        models.Account session =
+            await Account(client).get();
         Navigator.pushReplacementNamed(this.context, "/main");
-      }
     } catch (e) {
       setState(() {
         _loginRunning = false;
@@ -100,10 +96,8 @@ class LoginWindowState extends State<LoginWindow> {
       setState(() {
         _loginRunning = true;
       });
-      Session? session = await Account(client)
-          .createSession(email: _username.text, password: _password.text);
-      var box = await Hive.openBox("user");
-      box.put(STORAGE_SESSION_ID, session.$id);
+      models.Session session = await Account(client)
+          .createEmailSession(email: _username.text, password: _password.text);
       Navigator.pushReplacementNamed(this.context, "/main");
       setState(() {
         _loginRunning = false;

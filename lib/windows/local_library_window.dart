@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:appwrite/models.dart';
-import 'package:catbooks/data/album.dart';
+import 'package:catbooks_data/data/album.dart';
 import 'package:catbooks/service_provider/audio_service_provider.dart';
-import 'package:catbooks/storage.dart';
+import 'package:catbooks_data/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';

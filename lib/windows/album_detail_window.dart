@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:catbooks/data/album.dart';
-import 'package:catbooks/storage.dart';
+import 'package:catbooks_data/data/album.dart';
+import 'package:catbooks_data/storage.dart';
 import 'package:flutter/material.dart';
 
 import '../globals.dart';

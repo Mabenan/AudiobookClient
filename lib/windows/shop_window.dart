@@ -6,7 +6,7 @@ import 'package:catbooks/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../storage.dart';
+import 'package:catbooks_data/storage.dart';
 
 class ShopWindow extends StatefulWidget {
   const ShopWindow({Key? key}) : super(key: key);

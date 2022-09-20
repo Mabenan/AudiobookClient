@@ -13,7 +13,7 @@ bool _storage = false;
 Future<void> init() async{
   Hive.initFlutter("com.mabenan.catbooks");
   await JustAudioBackground.init(
-    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelId: 'de.mabenan.catbooks',
     androidNotificationChannelName: 'Audio playback',
     androidNotificationOngoing: true,
   );
