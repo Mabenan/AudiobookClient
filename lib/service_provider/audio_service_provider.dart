@@ -1,6 +1,6 @@
-import 'package:catbooks_data/data/album.dart';
-import 'package:catbooks_data/data/listening.dart';
-import 'package:catbooks_data/storage.dart';
+import 'package:catbooks/data/album.dart';
+import 'package:catbooks/data/listening.dart';
+import 'package:catbooks/storage.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 

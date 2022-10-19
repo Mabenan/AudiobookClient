@@ -41,8 +41,7 @@ dependencies:
   hive_flutter: ^1.1.0
   just_audio_background: ^0.0.1-beta.2
   just_audio_windows: 0.1.0
-  catbooks_data:
-    path: D:\catbooks\catbooks_data
+  logger: any
 
 dev_dependencies:
   flutter_test:

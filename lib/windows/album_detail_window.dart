@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:catbooks_data/data/album.dart';
-import 'package:catbooks_data/storage.dart';
+import 'package:catbooks/data/album.dart';
+import 'package:catbooks/storage.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:io' as io;
 import '../globals.dart';
 
 class AlbumDetailWindow extends StatefulWidget {
@@ -36,7 +36,10 @@ class _AlbumDetailWindowState extends State<AlbumDetailWindow> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(child: Image.memory(base64Decode(album.cover))),
+                    Center(child: FutureBuilder<Uri>(
+                    future: album.getArtUri(),
+            builder: (context, snapData) => snapData.hasData ? Image.file(io.File.fromUri(snapData.data!)) : Container( width:48, height:48),
+          ),),
                     // Description and share/explore buttons.
                     Center(
                       child: Padding(

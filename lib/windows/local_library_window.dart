@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:appwrite/models.dart';
-import 'package:catbooks_data/data/album.dart';
+import 'package:catbooks/data/album.dart';
 import 'package:catbooks/service_provider/audio_service_provider.dart';
-import 'package:catbooks_data/storage.dart';
+import 'package:catbooks/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
+import 'dart:io' as io;
 
 import '../globals.dart';
 
@@ -61,7 +62,10 @@ class _LocalLibraryWindowState extends State<LocalLibraryWindow> {
         child: ListTile(
           title: Text(doc!.name),
           subtitle: Text(doc.author),
-          leading: Image.memory(base64Decode(doc.cover)),
+          leading: FutureBuilder<Uri>(
+            future: doc.getArtUri(),
+            builder: (context, snapData) => snapData.hasData ? Image.file(io.File.fromUri(snapData.data!)) : Container( width:48, height:48),
+          ),
           trailing: StreamBuilder<int>(
             stream: doc.isDownloaded,
             initialData: 0,

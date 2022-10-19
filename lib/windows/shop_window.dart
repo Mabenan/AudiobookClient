@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
+import 'package:catbooks/app_ids.dart';
+import 'package:catbooks/data/album.dart';
 import 'package:catbooks/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-import 'package:catbooks_data/storage.dart';
+import 'dart:io' as io;
+import 'package:catbooks/storage.dart';
 
 class ShopWindow extends StatefulWidget {
   const ShopWindow({Key? key}) : super(key: key);
@@ -17,7 +19,7 @@ class ShopWindow extends StatefulWidget {
 
 class _ShopWindowState extends State<ShopWindow> {
   @override
-  DocumentList? _data;
+  List<Album?>? _data;
 
   Widget build(BuildContext context) {
     loadInitData();
@@ -28,35 +30,38 @@ class _ShopWindowState extends State<ShopWindow> {
             child: ListView.builder(
                 padding: EdgeInsets.all(20.0),
                 itemBuilder: (ctx, index) {
-                  var doc = _data!.documents[index];
-                  return buildAlbum(doc);
+                  var doc = _data![index];
+                  return buildAlbum(doc!);
                 },
-                itemCount: _data!.sum),
+                itemCount: _data!.length),
             onRefresh: onRefresh,
           );
   }
 
   Future<void> onRefresh() async {
-    Database(client)
-        .listDocuments(collectionId: "619b333ab673a")
-        .then((value) => setState(() {
-              _data = value;
-            }))
-        .catchError((err) {
-      print(err);
+    DocumentList albs = await Databases(client)
+      .listDocuments(databaseId: DATABASE, collectionId: "619b333ab673a");
+    _data = await Future.wait(albs.documents.map((alb) async{
+      return Album.fromServerWithoutTrack(alb);
+    }));
+    setState(() {
+
     });
   }
 
-  Widget buildAlbum(Document doc) {
+  Widget buildAlbum(Album doc) {
     return Card(
       child: ListTile(
-        title: Text(doc.data["name"]),
-        subtitle: Text(doc.data["author"]),
-        leading: Image.memory(base64Decode(doc.data["cover"])),
+        title: Text(doc.name),
+        subtitle: Text(doc.author),
+        leading: FutureBuilder<Uri>(
+          future: doc.getArtUri(),
+          builder: (context, snapData) => snapData.hasData ? Image.file(io.File.fromUri(snapData.data!)) : Container(width: 48, height: 48,),
+        ),
         trailing: IconButton(
           icon: Icon(Icons.add),
           onPressed: () async {
-            String album = doc.$id;
+            String album = doc.id;
             await getAlbum(album);
             libNavigator.pushNamed("/local");
           },
@@ -67,14 +72,7 @@ class _ShopWindowState extends State<ShopWindow> {
 
   void loadInitData() async {
     if (_data == null) {
-      Database(client)
-          .listDocuments(collectionId: "619b333ab673a")
-          .then((value) => setState(() {
-                _data = value;
-              }))
-          .catchError((err) {
-        print(err);
-      });
+      onRefresh();
     }
   }
 }
