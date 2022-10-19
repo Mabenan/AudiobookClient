@@ -41,8 +41,15 @@ class _ShopWindowState extends State<ShopWindow> {
   Future<void> onRefresh() async {
     DocumentList albs = await Databases(client)
       .listDocuments(databaseId: DATABASE, collectionId: "619b333ab673a");
-    _data = await Future.wait(albs.documents.map((alb) async{
-      return Album.fromServerWithoutTrack(alb);
+    List<Document> albDocs = List.empty(growable: true);
+    albDocs.addAll(albs.documents);
+    while(albDocs.length < albs.total && albDocs.isNotEmpty){
+      albs = await Databases(client)
+          .listDocuments(databaseId: DATABASE, collectionId: "619b333ab673a", queries: [Query.cursorAfter(albDocs.last.$id)]);
+      albDocs.addAll(albs.documents);
+    }
+    _data = await Future.wait(albDocs.map((alb) async{
+      return await getAlbum(alb.$id, false);
     }));
     setState(() {
 
@@ -62,7 +69,7 @@ class _ShopWindowState extends State<ShopWindow> {
           icon: Icon(Icons.add),
           onPressed: () async {
             String album = doc.id;
-            await getAlbum(album);
+            await addToLocalLibrary(album);
             libNavigator.pushNamed("/local");
           },
         ),

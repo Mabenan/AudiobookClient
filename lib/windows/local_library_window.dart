@@ -43,7 +43,7 @@ class _LocalLibraryWindowState extends State<LocalLibraryWindow> {
     if (_data == null) {
       List<String> albums = await getLocalLibrary();
       _data = await Stream.fromIterable(albums)
-          .asyncMap((item) async => await getAlbum(item))
+          .asyncMap((item) async => await getAlbum(item, true))
           .toList();
       _data!.remove(null);
 
@@ -106,7 +106,7 @@ class _LocalLibraryWindowState extends State<LocalLibraryWindow> {
 
     List<String> albums = await getLocalLibrary();
     _data = await Stream.fromIterable(albums)
-        .asyncMap((item) async => await getAlbum(item))
+        .asyncMap((item) async => await getAlbum(item, true))
         .toList();
     _data!.remove(null);
     setState(() {

@@ -11,26 +11,48 @@ import 'package:catbooks/globals.dart';
 
 const String STORAGE_SESSION_ID = "SESSION_ID";
 
-const String STORAGE_LOCAL_ALBUM = "ALBUM";
+const String STORAGE_LOCAL_ALBUM = "LOCAL_ALBUM";
+const String STORAGE_ALBUM = "ALBUM";
 const String STORAGE_LISTENING = "LISTENING";
 
 Map<String, Future<void>> locks = <String,Future<void>>{};
 
 Future<List<String>> getLocalLibrary() async {
   var box = await Hive.openBox(STORAGE_LOCAL_ALBUM);
-  return List.from(box.keys);
+  return List.from(box.values);
 }
 
-Future<Album?> getAlbum(String albumId) async {
+Future<void> addToLocalLibrary(String album) async {
 
   var lock = await awaitLock(STORAGE_LOCAL_ALBUM);
   var box = await Hive.openBox(STORAGE_LOCAL_ALBUM);
   try {
+    box.add(album);
+  }catch(e){
+    logger.w(e);
+  }finally{
+    lock.complete();
+  }
+}
+
+Future<Album?> getAlbum(String albumId, bool loadTracks) async {
+
+  var lock = await awaitLock(STORAGE_ALBUM);
+  var box = await Hive.openBox(STORAGE_ALBUM);
+  try {
     if (box.containsKey(albumId)) {
       String? localAlbumJSON = box.get(albumId);
-      return Album.fromJson(jsonDecode(localAlbumJSON!));
+      var album = Album.fromJson(jsonDecode(localAlbumJSON!));
+      if(loadTracks
+      && album.tracks.isEmpty){
+        await album.refreshTracks();
+        var localAlbumJSON = jsonEncode(album.toJson());
+
+        await box.put(albumId, localAlbumJSON);
+      }
+      return album;
     }else{
-      var serverAlbum = await Album.fromServer(await Databases(client).getDocument(databaseId: DATABASE, collectionId: COLLECTION_ALBUM, documentId: albumId), loadTracks: true);
+      var serverAlbum = await Album.fromServer(await Databases(client).getDocument(databaseId: DATABASE, collectionId: COLLECTION_ALBUM, documentId: albumId), loadTracks: loadTracks);
       var localAlbumJSON = jsonEncode(serverAlbum.toJson());
 
       await box.put(albumId, localAlbumJSON);
@@ -47,9 +69,7 @@ Future<void> removeAlbumFromLocalStorage(String album) async {
   var lock = await awaitLock(STORAGE_LOCAL_ALBUM);
   var box = await Hive.openBox(STORAGE_LOCAL_ALBUM);
   try {
-    if (box.containsKey(album)) {
-      box.delete(album);
-    }
+    box.delete(album);
   }catch(e){
     logger.w(e);
   }finally{

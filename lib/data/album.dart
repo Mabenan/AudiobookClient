@@ -154,7 +154,6 @@ class Album {
       io.File file = io.File(trackFilePath);
       if (await file.exists()) {
         await file.delete();
-        break;
       }
     }
     checkDownload();
@@ -177,7 +176,8 @@ class Album {
   }
 
   Future<void> refreshTracks() async {
-    tracks = await getTracksFromServer(id);
+    tracks = await getTracksFromServer(name);
+    checkDownload();
   }
 }
 

@@ -14,25 +14,27 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="47236be6-8abb-44c4-9dd9-43ab8f85ab0b" name="Default Changelist" comment="continue fix">
+    <list default="true" id="47236be6-8abb-44c4-9dd9-43ab8f85ab0b" name="Default Changelist" comment="release 3.0">
+      <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/catbooks.iml" beforeDir="false" afterPath="$PROJECT_DIR$/catbooks.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app_ids.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/globals.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/globals.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/service_provider/audio_service_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/service_provider/audio_service_provider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/data/album.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data/album.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/generated_plugin_registrant.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/generated_plugin_registrant.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/storage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/storage.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/windows/album_detail_window.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/windows/album_detail_window.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/windows/local_library_window.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/windows/local_library_window.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/windows/login_window.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/windows/login_window.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/windows/shop_window.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/windows/shop_window.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/windows/flutter/generated_plugin_registrant.h" beforeDir="false" afterPath="$PROJECT_DIR$/windows/flutter/generated_plugin_registrant.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/windows/flutter/generated_plugins.cmake" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\doene\.android\avd\pixel_2_pie_9_0_-_api_28.avd]" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
