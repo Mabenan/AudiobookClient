@@ -19,12 +19,17 @@ class Album {
   List<Track> tracks;
 
   final BehaviorSubject<int> _isDownloaded = BehaviorSubject<int>();
+  final BehaviorSubject<int> _downloadProgress = BehaviorSubject<int>();
   Future<void>? _downloadFuture;
   Stream<int> get isDownloaded {
     if (_isDownloaded.value == 0 && _downloadFuture == null) {
       checkDownload();
     }
     return _isDownloaded.stream;
+  }
+  int downloadMass = 0;
+  Stream<int> get downloadProgress {
+    return _downloadProgress.stream;
   }
 
   Album(
@@ -78,6 +83,7 @@ class Album {
 
   dispose() {
     _isDownloaded.close();
+    _downloadProgress.close();
   }
 
   static Future<List<Track>> getTracksFromServer(String id) async {
@@ -106,7 +112,14 @@ class Album {
     if (!await io.Directory(albumDir).exists()) {
       io.Directory(albumDir).create(recursive: true);
     }
-    for (var track in tracks) {
+    Map<Track, File> trackToFile = {};
+    downloadMass = 0;
+    for(var track in tracks){
+      trackToFile[track] = await Storage(client).getFile(bucketId: BUCKET_TRACK, fileId: track.fileid);
+      downloadMass += trackToFile[track]!.sizeOriginal;
+    }
+    var downloadedMass = 0;
+    await Future.wait(tracks.map((track) async {
       var trackFilePath = path_helper.join(albumDir, track.id);
       io.File file = io.File(trackFilePath);
       if (!(await file.exists())) {
@@ -114,7 +127,12 @@ class Album {
         await file.create();
         await file.writeAsBytes(data);
       }
-    }
+      downloadedMass += trackToFile[track]!.sizeOriginal;
+      _downloadProgress.add(downloadedMass);
+      return true;
+    }));
+    _downloadProgress.add(0);
+    downloadMass = 0;
     checkDownload();
   }
 
@@ -176,7 +194,7 @@ class Album {
   }
 
   Future<void> refreshTracks() async {
-    tracks = await getTracksFromServer(name);
+    tracks = await getTracksFromServer(id);
     checkDownload();
   }
 }
@@ -188,6 +206,7 @@ class Track {
   String album;
   int trackNumber;
   int cdNumber;
+  int length;
 
   Track(
       {required this.id,
@@ -195,7 +214,8 @@ class Track {
       required this.fileid,
       required this.album,
       required this.trackNumber,
-      required this.cdNumber});
+      required this.cdNumber,
+      required this.length});
 
   static Track fromJson(Map<String, dynamic> json) {
     return Track(
@@ -204,7 +224,8 @@ class Track {
         fileid: json["fileid"],
         album: json["album"],
         trackNumber: json["trackNumber"],
-        cdNumber: json["cdNumber"]);
+        cdNumber: json["cdNumber"],
+        length: json["length"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -214,7 +235,8 @@ class Track {
       "fileid": fileid,
       "album": album,
       "trackNumber": trackNumber,
-      "cdNumber": cdNumber
+      "cdNumber": cdNumber,
+      "length": length
     };
   }
 
@@ -225,12 +247,13 @@ class Track {
         fileid: e.data["fileid"],
         album: e.data["album"],
         trackNumber:  e.data["trackNumber"],
-        cdNumber:  e.data["cdNumber"]);
+        cdNumber:  e.data["cdNumber"],
+        length:  e.data["length"]);
   }
 
   Future<Uri> getURI() async {
-    var appDir = await getApplicationDocumentsDirectory();
-    var trackFilePath = path_helper.join(appDir.path, album, id);
+    var appDir = await getApplicationDir();
+    var trackFilePath = path_helper.join(appDir, album, id);
     io.File file = io.File(trackFilePath);
     return file.uri;
   }

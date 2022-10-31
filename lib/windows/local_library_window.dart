@@ -64,7 +64,9 @@ class _LocalLibraryWindowState extends State<LocalLibraryWindow> {
           subtitle: Text(doc.author),
           leading: FutureBuilder<Uri>(
             future: doc.getArtUri(),
-            builder: (context, snapData) => snapData.hasData ? Image.file(io.File.fromUri(snapData.data!)) : Container( width:48, height:48),
+            builder: (context, snapData) => snapData.hasData
+                ? Image.file(io.File.fromUri(snapData.data!))
+                : Container(width: 48, height: 48),
           ),
           trailing: StreamBuilder<int>(
             stream: doc.isDownloaded,
@@ -77,20 +79,45 @@ class _LocalLibraryWindowState extends State<LocalLibraryWindow> {
                       Icons.play_circle,
                       color: Colors.white,
                     ),
-                    onPressed: () {
-                      AudioServiceProvider().startAlbum(doc);
+                    onPressed: () async{
+                      await AudioServiceProvider().loadAlbum(doc);
+                      AudioServiceProvider().player.play();
+                      setState((){
+
+                      });
                     },
                   );
                 case 2:
-                  return IconButton(
-                    icon: Icon(
-                      Icons.download,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      doc.download();
-                    },
-                  );
+                  return StreamBuilder<int>(
+                      stream: doc.downloadProgress,
+                      initialData: 0,
+                      builder: (ctx, result) {
+                        if (result.data == 0) {
+                          return IconButton(
+                            icon: Icon(
+                              Icons.download,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              doc.download();
+                            },
+                          );
+                        } else {
+                          return Container(
+                            width: 300,
+                            child: Row(
+                              children: [
+                                Text(
+                                    "${(result.data! / 1000 / 1000).toStringAsFixed(2)} MB / ${(doc.downloadMass / 1000 / 1000).toStringAsFixed(2)} MB"),
+                                Spacer(),
+                                CircularProgressIndicator(
+                                  value: (result.data! / doc.downloadMass),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      });
                 default:
                   return Container(
                       width: 40, child: CircularProgressIndicator());
@@ -103,20 +130,15 @@ class _LocalLibraryWindowState extends State<LocalLibraryWindow> {
   }
 
   Future<void> onRefresh() async {
-
     List<String> albums = await getLocalLibrary();
     _data = await Stream.fromIterable(albums)
         .asyncMap((item) async => await getAlbum(item, true))
         .toList();
     _data!.remove(null);
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   openAlbumDetail(Album doc) {
-
     globalNavigator.pushNamed("/albumDetail", arguments: doc);
-
   }
 }

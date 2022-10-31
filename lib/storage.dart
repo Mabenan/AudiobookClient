@@ -63,6 +63,7 @@ Future<Album?> getAlbum(String albumId, bool loadTracks) async {
   }finally{
     lock.complete();
   }
+  return null;
 }
 
 Future<void> removeAlbumFromLocalStorage(String album) async {
@@ -110,4 +111,18 @@ Future<Listening?> getListening(String albumId) async{
   }finally{
     lock.complete();
   }
+  return null;
+}
+
+Future<void> saveListening(String albumId, Listening listening) async{
+  var lock = await awaitLock(STORAGE_LISTENING);
+  var box = await Hive.openBox(STORAGE_LISTENING);
+  try {
+      await box.put(albumId, jsonEncode(listening.toJson()));
+  }catch(e){
+    logger.w(e);
+  }finally{
+    lock.complete();
+  }
+
 }
