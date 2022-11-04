@@ -1,6 +1,7 @@
 import 'package:catbooks/data/album.dart';
 import 'package:catbooks/globals.dart';
 import 'package:catbooks/service_provider/audio_service_provider.dart';
+import 'package:catbooks/storage.dart';
 import 'package:catbooks/windows/local_library_window.dart';
 import 'package:catbooks/windows/shop_window.dart';
 import 'package:flutter/material.dart';
@@ -81,6 +82,11 @@ class NavHelper extends NavigatorObserver {
 
 class MainWindowState extends State<MainWindow> {
   int _currentIndex = 0;
+
+  void initState() {
+    super.initState();
+    checkAlbum(context);
+  }
   upateIndex(int index) {
     if (_currentIndex != index) {
       setState(() {
@@ -105,78 +111,100 @@ class MainWindowState extends State<MainWindow> {
           stream: AudioServiceProvider().currentAlbum,
           builder: (context, snapshot) {
             if (snapshot.hasData && snapshot.data != null) {
-              return Container(
-                height: 64,
-                width: double.infinity,
-                padding: EdgeInsets.all(5),
-                child: Row(
-                  children: [
-                    FutureBuilder<Uri>(
-                      future: snapshot.data!.getArtUri(),
-                      builder: (context, snapData) => snapData.hasData
-                          ? Image.file(
-                              io.File.fromUri(snapData.data!),
-                              width: 48,
-                              height: 48,
-                            )
-                          : Container(width: 48, height: 48),
-                    ),
-                    Flexible(
-                      child: Column(children: [
-                        Marquee(
-                          text: snapshot.data!.name,
-                          blankSpace: 20.0,
-                          velocity: 30.0,
-                          pauseAfterRound: Duration(seconds: 1),
-                        ),
-                        StreamBuilder<Duration?>(
-                          stream: AudioServiceProvider().durationLeft,
-                          builder: (context, durationData){
-                            if(durationData.hasData) {
-                              return Text(getFormatDuration(durationData.data!));
-                            }else{
-                              return Text("");
-                            }
-                          },
-                        )
-                      ]),
-                    ),
-                    IconButton(
-                      iconSize: 48,
-                      icon: Icon(
-                        Icons.replay_30,
-                        color: Colors.white,
+              return  Container(
+                  height: 64,
+                  width: double.infinity,
+                  padding: EdgeInsets.all(5),
+                  child: GestureDetector(
+                    onTap: () => globalNavigator.pushNamed("/player"),
+                    child: Row(
+                    children: [
+                      FutureBuilder<Uri>(
+                        future: snapshot.data!.getArtUri(),
+                        builder: (context, snapData) => snapData.hasData
+                            ? Image.file(
+                                io.File.fromUri(snapData.data!),
+                                width: 48,
+                                height: 48,
+                              )
+                            : Container(width: 48, height: 48),
                       ),
-                      onPressed: () {
-                        AudioServiceProvider().replay(Duration(seconds: 30));
-                      },
-                    ),
-                    StreamBuilder<bool>(
-                      stream: AudioServiceProvider().player.playingStream,
-                      builder: (context, playingData) =>
-                          playingData.hasData && playingData.data!
-                              ? IconButton(
-                                  iconSize: 48,
-                                  icon: Icon(
-                                    Icons.pause_circle,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    AudioServiceProvider().player.pause();
-                                  },
-                                )
-                              : IconButton(
-                                  iconSize: 48,
-                                  icon: Icon(
-                                    Icons.play_circle,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    AudioServiceProvider().player.pause();
-                                  },
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                            Container(
+                              height: 25,
+                              width: double.infinity,
+                              child:
+                              StreamBuilder<int?>(
+                                stream: AudioServiceProvider().player.currentIndexStream,
+                                initialData: 0,
+                                builder: (context, currIndexSnap) => Marquee(
+                                  text: snapshot.data!.name + " | " + snapshot.data!.tracks[currIndexSnap.data!].name,
+                                  blankSpace: 20.0,
+                                  velocity: 30.0,
+                                  pauseAfterRound: Duration(seconds: 1),
                                 ),
-                    )
-                  ],
+                              ),
+                            ),
+                            Container(
+                              height: 25,
+                              width: double.infinity,
+                              child: StreamBuilder<Duration?>(
+                                stream: AudioServiceProvider().durationLeft,
+                                builder: (context, durationData){
+                                  if(durationData.hasData) {
+                                    return Text(getFormatDuration(durationData.data!));
+                                  }else{
+                                    return Text("");
+                                  }
+                                },
+                              ),
+                            )
+                          ]),
+                        ),
+                      ),
+                      IconButton(
+                        iconSize: 48,
+                        icon: Icon(
+                          Icons.replay_30,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          AudioServiceProvider().replay(Duration(seconds: 30));
+                        },
+                      ),
+                      StreamBuilder<bool>(
+                        stream: AudioServiceProvider().player.playingStream,
+                        builder: (context, playingData) =>
+                            playingData.hasData && playingData.data!
+                                ? IconButton(
+                                    iconSize: 48,
+                                    icon: Icon(
+                                      Icons.pause_circle,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      AudioServiceProvider().player.pause();
+                                    },
+                                  )
+                                : IconButton(
+                                    iconSize: 48,
+                                    icon: Icon(
+                                      Icons.play_circle,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      AudioServiceProvider().player.play();
+                                    },
+                                  ),
+                      )
+                    ],
+                  ),
                 ),
               );
             } else {
@@ -236,11 +264,26 @@ class MainWindowState extends State<MainWindow> {
       durationFormat += "${duration.inHours}Std";
     }
     if((duration.inMinutes - duration.inHours * 60) > 0){
-      durationFormat += "${duration.inMinutes - duration.inHours * 60}min";
+      durationFormat += " ${duration.inMinutes - duration.inHours * 60}min";
     }
     if((duration.inSeconds - duration.inMinutes * 60) > 0){
-      durationFormat += "${duration.inSeconds - duration.inMinutes * 60}sec";
+      durationFormat += " ${duration.inSeconds - duration.inMinutes * 60}sec";
     }
     return durationFormat;
+  }
+
+  checkAlbum(BuildContext context) async {
+    Album? album;
+    try {
+      album = AudioServiceProvider().lastAlbum;
+    }catch(ex){
+
+    }
+    if(album == null) {
+      var listenings = await getListenings();
+      listenings.sort((a, b) => a.lastChanged.compareTo(b.lastChanged),);
+      album = await getAlbum(listenings.last.albumId, true);
+      AudioServiceProvider().loadAlbum(album!);
+    }
   }
 }

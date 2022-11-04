@@ -79,12 +79,10 @@ class _LocalLibraryWindowState extends State<LocalLibraryWindow> {
                       Icons.play_circle,
                       color: Colors.white,
                     ),
-                    onPressed: () async{
+                    onPressed: () async {
                       await AudioServiceProvider().loadAlbum(doc);
                       AudioServiceProvider().player.play();
-                      setState((){
-
-                      });
+                      setState(() {});
                     },
                   );
                 case 2:
@@ -104,15 +102,14 @@ class _LocalLibraryWindowState extends State<LocalLibraryWindow> {
                           );
                         } else {
                           return Container(
-                            width: 300,
-                            child: Row(
+                            child: Column(
                               children: [
-                                Text(
-                                    "${(result.data! / 1000 / 1000).toStringAsFixed(2)} MB / ${(doc.downloadMass / 1000 / 1000).toStringAsFixed(2)} MB"),
-                                Spacer(),
                                 CircularProgressIndicator(
                                   value: (result.data! / doc.downloadMass),
                                 ),
+                                Spacer(),
+                                Text(
+                                    "${(result.data! / 1000 / 1000).toStringAsFixed(2)} MB / ${(doc.downloadMass / 1000 / 1000).toStringAsFixed(2)} MB"),
                               ],
                             ),
                           );

@@ -98,10 +98,14 @@ Future<Listening?> getListening(String albumId) async{
   try {
     if (box.containsKey(albumId)) {
       String? listeningJSON = box.get(albumId);
-      return Listening.fromJson(jsonDecode(listeningJSON!));
+      Map<String,dynamic> data = jsonDecode(listeningJSON!);
+      if(!data.containsKey("albumId")){
+        data["albumId"] = albumId;
+      }
+      return Listening.fromJson(data);
     }else{
-      var listening = Listening(track: 0, duration: const Duration());
-      var listeningJSON = jsonEncode(Listening(track: 0, duration: const Duration()).toJson());
+      var listening = Listening(track: 0, duration: const Duration(), lastChanged: DateTime.now(), albumId: albumId);
+      var listeningJSON = jsonEncode(listening.toJson());
 
       await box.put(albumId, listeningJSON);
       return listening;
@@ -114,10 +118,30 @@ Future<Listening?> getListening(String albumId) async{
   return null;
 }
 
+Future<List<Listening>> getListenings() async{
+  var lock = await awaitLock(STORAGE_LISTENING);
+  var box = await Hive.openBox(STORAGE_LISTENING);
+  try {
+    return box.keys.map((id) {
+      Map<String,dynamic> data = jsonDecode(box.get(id));
+      if(!data.containsKey("albumId")){
+        data["albumId"] = id;
+      }
+      return Listening.fromJson(data);
+    }).toList();
+  }catch(e){
+    logger.w(e);
+  }finally{
+    lock.complete();
+  }
+  return List.empty();
+}
+
 Future<void> saveListening(String albumId, Listening listening) async{
   var lock = await awaitLock(STORAGE_LISTENING);
   var box = await Hive.openBox(STORAGE_LISTENING);
   try {
+      listening.lastChanged = DateTime.now();
       await box.put(albumId, jsonEncode(listening.toJson()));
   }catch(e){
     logger.w(e);

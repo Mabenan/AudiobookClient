@@ -1,6 +1,7 @@
 import 'package:catbooks/windows/album_detail_window.dart';
 import 'package:catbooks/windows/login_window.dart';
 import 'package:catbooks/windows/main_window.dart';
+import 'package:catbooks/windows/player_window.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ class CatbooksApp extends MaterialApp {
             "/main": (ctx) => MainWindow(),
             "/login": (ctx) => LoginWindow(),
             "/albumDetail": (ctx) => AlbumDetailWindow(),
+            "/player": (ctx) => PlayerWindow()
           },
           initialRoute: "/login",
           themeMode: ThemeMode.dark,

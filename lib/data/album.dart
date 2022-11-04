@@ -42,7 +42,7 @@ class Album {
   }
 
   static Album fromJson(Map<String, dynamic> json) {
-    return Album(
+    var alb = Album(
       id: json["id"],
       name: json["name"],
       author: json["author"],
@@ -50,6 +50,18 @@ class Album {
       tracks: List<Track>.from(
           (json["tracks"] as Iterable).map((e) => Track.fromJson(e))),
     );
+    alb.tracks.sort((a, b) {
+      if(a.cdNumber == b.cdNumber ){
+        if(a.trackNumber == b.trackNumber){
+          return a.name.compareTo(b.name);
+        }else {
+          return a.trackNumber.compareTo(b.trackNumber);
+        }
+      }else{
+        return a.cdNumber.compareTo(b.cdNumber);
+      }
+    });
+    return alb;
   }
 
   Map<String, dynamic> toJson() {
@@ -87,6 +99,7 @@ class Album {
   }
 
   static Future<List<Track>> getTracksFromServer(String id) async {
+    List<Track> trackObjects =List.empty();
     try {
       List<Document> tracks = List.empty(growable: true);
       do {
@@ -99,12 +112,24 @@ class Album {
           break;
         }
       }while(true);
-      return List<Track>.from(
+      trackObjects = List<Track>.from(
           tracks.map((e) => Track.fromServer(e)));
     } catch (e) {
       logger.w(e);
-      return List.empty(growable: true);
+      trackObjects = List.empty(growable: true);
     }
+    trackObjects.sort((a, b) {
+      if(a.cdNumber == b.cdNumber ){
+        if(a.trackNumber == b.trackNumber){
+          return a.name.compareTo(b.name);
+        }else {
+          return a.trackNumber.compareTo(b.trackNumber);
+        }
+      }else{
+        return a.cdNumber.compareTo(b.cdNumber);
+      }
+    });
+    return trackObjects;
   }
 
   download() async {
@@ -119,6 +144,7 @@ class Album {
       downloadMass += trackToFile[track]!.sizeOriginal;
     }
     var downloadedMass = 0;
+    _downloadProgress.add(1);
     await Future.wait(tracks.map((track) async {
       var trackFilePath = path_helper.join(albumDir, track.id);
       io.File file = io.File(trackFilePath);
