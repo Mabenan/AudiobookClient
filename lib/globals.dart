@@ -1,118 +1,104 @@
-import 'package:audio_service/audio_service.dart';
-import 'package:catbooks/background.dart';
-import 'package:catbooks/data/listening.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'dart:async';
 
-import 'data/album.dart';
-import 'data/track.dart';
-final navigatorKey = GlobalKey<NavigatorState>();
-bool _offline = false;
-bool forcedOffline = true;
-bool get offline => _offline;
-set offline(value) {
-  if ((_offline == true && value != _offline) || forcedOffline == true) {
-    Future.microtask(() async {
-      if ((await (Parse().healthCheck()
-            ..catchError((err) {
-              forcedOffline = true;
-            })))
-          .success) {
-        forcedOffline = false;
-      }
-      if((await ParseUser.currentUser()) != null) {
-        await Albums().refresh();
-        await Tracks().refresh();
-        Tracks().getAll();
+import 'package:appwrite/appwrite.dart';
+import 'package:audio_service/audio_service.dart';
+import 'package:catbooks/app_ids.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:logger/logger.dart';
+import 'package:just_audio_background/just_audio_background.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
+
+FlutterBackgroundService? _service;
+Client? _client;
+Logger?  _logger;
+String _app = "";
+bool _storage = false;
+
+Future<void> init() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  _app = "de.mabenan.catbooks";
+  await Hive.initFlutter(_app);
+  _logger = Logger();
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'de.mabenan.catbooks',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+  );
+  await initSleepTimer();
+  _client = Client();
+  _client!
+      .setEndpoint("https://apps.mabenan.de/v1")
+      .setProject(PROJECT_ID)
+      .setSelfSigned(status: false);
+}
+
+initSleepTimer()  async{
+  WidgetsFlutterBinding.ensureInitialized();
+  _service = FlutterBackgroundService();
+
+  _service!.configure(
+    androidConfiguration: AndroidConfiguration(
+      // this will be executed when app is in foreground or background in separated isolate
+      onStart: onStart,
+
+      // auto start service
+      autoStart: true,
+      isForegroundMode: false,
+
+      notificationChannelId: 'de.mabenan.catbooks.timer',
+      initialNotificationTitle: 'Catbooks',
+      initialNotificationContent: 'Sleep Timer',
+      foregroundServiceNotificationId: 888,
+    ),
+    iosConfiguration: IosConfiguration(
+      // auto start service
+      autoStart: true,
+
+      // this will be executed when app is in foreground in separated isolate
+      onForeground: onStart,
+    ),);
+
+  _service!.startService();
+}
+
+Client get client => _client!;
+Logger get logger => _logger!;
+FlutterBackgroundService get service => _service!;
+
+Future<String> getApplicationDir() async{
+  var appDir = await getApplicationDocumentsDirectory();
+  return path.join(appDir.path, _app);
+}
+
+final _navigatorKey = GlobalKey<NavigatorState>();
+final _navigatorKey2 = GlobalKey<NavigatorState>();
+
+GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
+NavigatorState get libNavigator => _navigatorKey.currentState!;
+GlobalKey<NavigatorState> get globalNavigatorKey => _navigatorKey2;
+NavigatorState get globalNavigator => _navigatorKey2.currentState!;
+
+Timer? _actualTimer;
+@pragma('vm:entry-point')
+onStart(ServiceInstance lservice) async {
+  print("service started");
+  lservice.on("setTimer").listen((event) {
+    print("timer Set");
+    if(_actualTimer != null){
+      _actualTimer!.cancel();
+    }
+    _actualTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      print("time:${timer.tick}");
+      if(timer.tick < (event!["duration"] as int)){
+        lservice.invoke("timerTick", { "tick": timer.tick});
+      }else{
+        lservice.invoke("sleepTimerReached");
+        timer.cancel();
       }
     });
-  }
-  if (value != null) {
-    ParseCoreData().getStore().setBool("offline", value);
-    _offline = value;
-  } else {
-    ParseCoreData().getStore().setBool("offline", false);
-    _offline = false;
-  }
-}
-
-Future<bool> isOffline() async {
-  if (offline) {
-    return true;
-  } else {
-    if (forcedOffline) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-}
-bool isBack = false;
-initParse({bool back = false}) async {
-  isBack = back;
-  Map<String, ParseObjectConstructor> subclassMap = {
-    "Album": () => Album(),
-    "Track": () => Track(),
-  };
-  if (back) subclassMap.addAll({"Listening": () => Listening()}); //This is to ensure that only in Backend the Listenings are loaded
-  Future<ParseResponse> resp;
-  if (const bool.fromEnvironment("DEBUG_SERVER")) {
-    Parse server = await Parse().initialize("com.mabenan.catbooks",
-        kIsWeb ? "http://localhost:13371/" : "http://10.0.2.2:13371/",
-        appName: "CatBooks",
-        appVersion: "Version 1",
-        appPackageName: "com.mabenan.catbooks",
-        coreStore: await CoreStoreSharedPrefsImp.getInstance(),
-        debug: true,
-        autoSendSessionId: true,
-        registeredSubClassMap: subclassMap,
-        liveQueryUrl:
-            kIsWeb ? "http://localhost:13371/" : "http://10.0.2.2:13371/");
-    resp = server.healthCheck();
-  } else {
-    Parse server = await Parse().initialize(
-        "com.mabenan.catbooks", "http://node:13391/",
-        appName: "CatBooks",
-        appVersion: "Version 1",
-        appPackageName: "com.mabenan.catbooks",
-        coreStore: await CoreStoreSharedPrefsImp.getInstance(),
-        debug: false,
-        autoSendSessionId: true,
-        registeredSubClassMap: subclassMap,
-        liveQueryUrl: "http://node:13391/");
-    resp = server.healthCheck();
-    var resp2 = await resp;
-    if (!resp2.success) {
-      server = await Parse().initialize(
-          "com.mabenan.catbooks", "https://audiobook.mabenan.de/",
-          appName: "CatBooks",
-          appVersion: "Version 1",
-          appPackageName: "com.mabenan.catbooks",
-          coreStore: await CoreStoreSharedPrefsImp.getInstance(),
-          debug: false,
-          autoSendSessionId: true,
-          registeredSubClassMap: subclassMap,
-          liveQueryUrl: "https://audiobook.mabenan.de/");
-      resp = server.healthCheck();
-    }
-  }
-  resp.then((value) {
-    if (value.success) forcedOffline = false;
-    if(!back){
-      Albums().getAll();
-      Tracks().getAll();
-    }
   });
-  resp.catchError((err) {
-    forcedOffline = true;
-    showDialog(
-        context: navigatorKey.currentContext,
-        builder: (context) => AlertDialog(
-        title: Text(err)
 
-        )
-    );
-  });
-  offline = await ParseCoreData().getStore().getBool("offline");
 }
