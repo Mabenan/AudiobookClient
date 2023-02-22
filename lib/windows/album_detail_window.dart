@@ -103,6 +103,16 @@ class _AlbumDetailWindowState extends State<AlbumDetailWindow> {
                                   child: Text("Remove from Library"),
                                 ),
                               ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    await album.refreshTracks();
+                                    album.checkDownload();
+                                  },
+                                  child: Text("Refresh Tracks"),
+                                ),
+                              ),
                             ],
                           ),
                         ),

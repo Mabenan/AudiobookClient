@@ -27,7 +27,9 @@ Future<void> addToLocalLibrary(String album) async {
   var lock = await awaitLock(STORAGE_LOCAL_ALBUM);
   var box = await Hive.openBox(STORAGE_LOCAL_ALBUM);
   try {
-    box.add(album);
+    if(!box.containsKey(album)) {
+      box.put(album, album);
+    }
   }catch(e){
     logger.w(e);
   }finally{
