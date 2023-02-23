@@ -272,8 +272,8 @@ class Track {
         name: e.data["name"],
         fileid: e.data["fileid"],
         album: e.data["album"],
-        trackNumber:  e.data["trackNumber"],
-        cdNumber:  e.data["cdNumber"],
+        trackNumber:  e.data["trackNumber"] ?? 0,
+        cdNumber:  e.data["cdNumber"] ?? 0,
         length:  e.data["length"]);
   }
 
